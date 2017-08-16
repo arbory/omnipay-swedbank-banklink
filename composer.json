@@ -1,0 +1,20 @@
+{
+    "name": "arbory/omnipay-swedbank-banklink",
+    "description": "Swedbank banklink omnipay package",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Mārtiņš Ungurs",
+            "email": "martins.ungurs@cube.lv"
+        }
+    ],
+    "autoload": {
+      "psr-4": { "Omnipay\\SwedbankBanklink\\" : "src/" }
+    },
+    "require": {
+      "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+      "omnipay/tests": "~2.0"
+    }
+}
