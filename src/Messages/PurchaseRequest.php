@@ -13,8 +13,8 @@ class PurchaseRequest extends AbstractRequest
      */
     private function getEncodedData(){
         $data = [
-            'VK_SERVICE'    => '1002',
-            'VK_VERSION'    => '008',
+            'VK_SERVICE'    => '1002', // Service code
+            'VK_VERSION'    => '008', // Protocol version
             'VK_SND_ID'     => $this->getMerchantId(),
             'VK_STAMP'      => $this->getTransactionId(),  // Max 20 length
             'VK_AMOUNT'     => $this->getAmount(), // Decimal with point
@@ -50,11 +50,10 @@ class PurchaseRequest extends AbstractRequest
 
     /**
      * @param $value
-     * @return \Omnipay\Common\Message\AbstractRequest
      */
     public function setMerchantId($value)
     {
-        return $this->setParameter('merchantId', $value);
+        $this->setParameter('merchantId', $value);
     }
 
     /**
@@ -65,6 +64,7 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
+     * Glue together encoded and raw data
      * @return array
      */
     public function getData()
