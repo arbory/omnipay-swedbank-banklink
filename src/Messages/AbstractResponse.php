@@ -33,7 +33,6 @@ abstract class AbstractResponse extends CommonAbstractResponse
      */
     public function getMessage()
     {
-        die('AbstractResponse implement error codes and messages');
         return null;
     }
 

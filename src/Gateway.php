@@ -4,6 +4,7 @@ namespace Omnipay\SwedbankBanklink;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\SwedbankBanklink\Messages\PurchaseRequest;
+use Omnipay\SwedbankBanklink\Messages\CompleteRequest;
 
 /**
  * Class Gateway
@@ -38,13 +39,33 @@ class Gateway extends AbstractGateway
         );
     }
 
+
+    /**
+     * @param array $options
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function purchase(array $options = [])
+    {
+        return $this->createRequest(PurchaseRequest::class, $options);
+    }
+
+    /**
+     * Complete transaction
+     * @param array $options
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function completePurchase(array $options = [])
+    {
+        return $this->createRequest(CompleteRequest::class, $options);
+    }
+
     /**
      * @param string $value
      * @return $this
      */
     public function setGatewayUrl($value)
     {
-        return $this->setParameter('gatewayUrl', $value);
+        $this->setParameter('gatewayUrl', $value);
     }
 
     /**
@@ -61,7 +82,7 @@ class Gateway extends AbstractGateway
      */
     public function setMerchantId($value)
     {
-        return $this->setParameter('merchantId', $value);
+        $this->setParameter('merchantId', $value);
     }
 
     /**
@@ -78,7 +99,7 @@ class Gateway extends AbstractGateway
      */
     public function setReturnUrl($value)
     {
-        return $this->setParameter('returnUrl', $value);
+        $this->setParameter('returnUrl', $value);
     }
 
     /**
@@ -95,7 +116,7 @@ class Gateway extends AbstractGateway
      */
     public function setCertificatePath($value)
     {
-        return $this->setParameter('certificatePath', $value);
+        $this->setParameter('certificatePath', $value);
     }
 
     /**
@@ -114,18 +135,12 @@ class Gateway extends AbstractGateway
         return $this->getParameter('language');
     }
 
+    /**
+     * @param $value
+     */
     public function setLanguage($value)
     {
-        return $this->setParameter('language', $value);
-    }
-
-    /**
-     * @param array $options
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function purchase(array $options = [])
-    {
-        return $this->createRequest(PurchaseRequest::class, $options);
+        $this->setParameter('language', $value);
     }
 
     /**
@@ -137,21 +152,12 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param mixed $encoding
+     * @param $value
      */
     public function setEncoding($value)
     {
-        return $this->setParameter('encoding', $value);
+        $this->setParameter('encoding', $value);
     }
 
-
-    /**
-     * @param array $options
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function completePurchase(array $options = [])
-    {
-        return $this->createRequest(CompleteRequest::class, $options);
-    }
 
 }

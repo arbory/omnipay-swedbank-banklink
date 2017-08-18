@@ -11,7 +11,8 @@ class PurchaseRequest extends AbstractRequest
      * @return array
      * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
-    private function getEncodedData(){
+    private function getEncodedData()
+    {
         $data = [
             'VK_SERVICE'    => '1002', // Service code
             'VK_VERSION'    => '008', // Protocol version
@@ -59,7 +60,8 @@ class PurchaseRequest extends AbstractRequest
     /**
      * @return mixed
      */
-    public function getMerchantId(){
+    public function getMerchantId()
+    {
         return $this->getParameter('merchantId');
     }
 
