@@ -12,12 +12,7 @@ class CompleteResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        // TODO: add here CREATED and Pending state?
-        if(isset($this->data['RESULT']) && $this->data['RESULT'] == 'OK'){
-            return true;
-        }
-
-        return false;
+        return $this->data['VK_SERVICE'] == '1101';
     }
 
     /**
@@ -28,24 +23,7 @@ class CompleteResponse extends AbstractResponse
      */
     public function isCancelled()
     {
-        if(isset($this->data['RESULT']) && $this->data['RESULT'] == 'TIMEOUT'){
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPending()
-    {
-        //TODO: is CREATED the same as pending?
-        if(isset($this->data['RESULT']) && $this->data['RESULT'] == 'PENDING'){
-            return true;
-        }
-
-        return false;
+        return $this->data['VK_SERVICE'] == '1901';
     }
 
     /**
@@ -53,9 +31,6 @@ class CompleteResponse extends AbstractResponse
      */
     public function getCode()
     {
-        return $this->data['RESULT'] ?? $this->data['RESULT'];
+        return $this->data['VK_SERVICE'];
     }
-
-
-
 }

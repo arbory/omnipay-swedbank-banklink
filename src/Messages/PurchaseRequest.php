@@ -31,7 +31,7 @@ class PurchaseRequest extends AbstractRequest
      */
     private function getDecodedData(){
         $data = [
-            'VK_MAC'        => base64_encode($this->generateControlCode($this->getEncodedData())), // MAC - Control code / signature
+            'VK_MAC'        => $this->generateControlCode($this->getEncodedData()), // MAC - Control code / signature
             'VK_RETURN'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
             'VK_LANG'       => $this->getLanguage(), // Communication language (LAT, ENG RUS), no format standard?
             'VK_ENCODING'   => $this->getEncoding() // ISO-8850-13 (def) or UTF-8
