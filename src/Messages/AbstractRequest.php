@@ -63,24 +63,6 @@ abstract class AbstractRequest extends CommonAbstractRequest
         return $this->setParameter('returnUrl', $value);
     }
 
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setCertificatePassword($value)
-    {
-        return $this->setParameter('certificatePassword', $value);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCertificatePassword()
-    {
-        return $this->getParameter('certificatePassword');
-    }
-
     /**
      * @param string $value
      * @return $this
@@ -139,7 +121,7 @@ abstract class AbstractRequest extends CommonAbstractRequest
      */
     public function sendData($data)
     {
-        $this->validate('certificatePath', 'certificatePassword');
+        $this->validate('certificatePath');
         // Create fake response flow, so that user can be redirected
         /** @var AbstractResponse $purchaseResponseObj */
         $purchaseResponseObj = $this->createResponse($data);
