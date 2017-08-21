@@ -78,7 +78,8 @@ class Pizza
      */
     public static function test(array $data, $privateCertPath, $encoding)
     {
-        $result = self::isValidControlCode($data, self::generateControlCode($data, $encoding, $privateCertPath), $privateCertPath, $encoding);
+        $cCode = self::generateControlCode($data, $encoding, $privateCertPath);
+        $result = self::isValidControlCode($data, $cCode, $privateCertPath, $encoding);
         return $result;
     }
 
