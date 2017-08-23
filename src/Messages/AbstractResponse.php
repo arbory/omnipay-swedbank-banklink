@@ -9,7 +9,8 @@ abstract class AbstractResponse extends CommonAbstractResponse
     private $returnUrl = null;
     private $gatewayUrl = null;
 
-    public function setReturnUrl($returnUrl){
+    public function setReturnUrl($returnUrl)
+    {
         $this->returnUrl = $returnUrl;
     }
 
@@ -34,6 +35,12 @@ abstract class AbstractResponse extends CommonAbstractResponse
     public function getMessage()
     {
         return null;
+    }
+
+    public function getTransactionReference()
+    {
+        $data = $this->getData();
+        return $data['VK_REF'] ?? $data['VK_REF'];
     }
 
 }

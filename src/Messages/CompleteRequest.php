@@ -54,26 +54,6 @@ class CompleteRequest extends AbstractRequest
 
     public function getData()
     {
-        // Read data from  HTTP req. object
-        $data = $this->getResponseData();
-        return $data;
-    }
-
-    /*
-     * Faking sending flow
-     */
-    public function createResponse(array $data)
-    {
-        // Read data from request object
-        return $purchaseResponseObj = new CompleteResponse($this, $data);
-    }
-
-    /**
-     * @return array
-     * @throws InvalidResponseException
-     */
-    public function getResponseData()
-    {
         /** @var ParameterBag $queryObj */
         $queryObj = $this->httpRequest->query;
 
@@ -84,6 +64,15 @@ class CompleteRequest extends AbstractRequest
         }else{
             throw new InvalidResponseException(join(';', $errMessages));
         }
+    }
+
+    /*
+     * Faking sending flow
+     */
+    public function createResponse(array $data)
+    {
+        // Read data from request object
+        return $purchaseResponseObj = new CompleteResponse($this, $data);
     }
 
     /**
