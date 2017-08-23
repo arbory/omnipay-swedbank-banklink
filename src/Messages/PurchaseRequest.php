@@ -17,10 +17,10 @@ class PurchaseRequest extends AbstractRequest
             'VK_SERVICE'    => '1002', // Service code
             'VK_VERSION'    => '008', // Protocol version
             'VK_SND_ID'     => $this->getMerchantId(),
-            'VK_STAMP'      => $this->getTransactionId(),  // Max 20 length
+            'VK_STAMP'      => $this->getTransactionReference(),  // Max 20 length
             'VK_AMOUNT'     => $this->getAmount(), // Decimal with point
             'VK_CURR'       => $this->getCurrency(), // ISO 4217 format (LVL/EUR, etc.)
-            'VK_REF'        => $this->getTransactionId(),  // Max 20 length
+            'VK_REF'        => $this->getTransactionReference(),  // Max 20 length
             'VK_MSG'        => $this->getDescription(), // Max 300 length
         ];
         return $data;
