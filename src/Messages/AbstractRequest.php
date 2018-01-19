@@ -7,13 +7,6 @@ use  Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 abstract class AbstractRequest extends CommonAbstractRequest
 {
     /**
-     * @param $data array
-     * @param $httpClient
-     * @return AbstractResponse
-     */
-    abstract protected function createResponse(array $data);
-
-    /**
      * @return mixed
      */
     public function getControlCode()

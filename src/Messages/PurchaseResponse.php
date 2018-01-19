@@ -35,7 +35,9 @@ class PurchaseResponse extends AbstractResponse  implements RedirectResponseInte
 
     public function getRedirectUrl()
     {
-       return $this->getGatewayUrl();
+        /** @var PurchaseRequest $request */
+        $request = $this->getRequest();
+        return $request->getGatewayUrl();
     }
 
 }

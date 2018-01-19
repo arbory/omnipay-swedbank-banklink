@@ -78,12 +78,13 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @param       $httpResponse
-     * @param array $data
-     * @return PurchaseResponse
+     * @param mixed $data
+     * @return \Omnipay\Common\Message\ResponseInterface|PurchaseResponse
      */
-    public function createResponse(array $data)
+    public function sendData($data)
     {
+        // Create fake response flow, so that user can be redirected
+        /** @var AbstractResponse $purchaseResponseObj */
         return $purchaseResponseObj = new PurchaseResponse($this, $data);
     }
 }
