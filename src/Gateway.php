@@ -13,6 +13,9 @@ use Omnipay\SwedbankBanklink\Messages\CompleteRequest;
  */
 class Gateway extends AbstractGateway
 {
+
+
+
     /**
      * @return string
      */
@@ -30,8 +33,8 @@ class Gateway extends AbstractGateway
             'gatewayUrl'           => 'https://ib.swedbank.lv/banklink/',
             'merchantId'            => '', //VK_SND_ID
             'returnUrl'             => '',
-            'certificatePath'       => '',
-            'certificatePassword'   => '',
+            'privateCertificatePath' => '',
+            'publicCertificatePath' => '',
 
             //Global parameters for requests will be set via gateway
             'language'              => 'LAT',
@@ -114,18 +117,37 @@ class Gateway extends AbstractGateway
      * @param string $value
      * @return $this
      */
-    public function setCertificatePath($value)
+    public function setPrivateCertificatePath($value)
     {
-        $this->setParameter('certificatePath', $value);
+        return $this->setParameter('privateCertificatePath', $value);
     }
 
     /**
      * @return string
      */
-    public function getCertificatePath()
+    public function getPrivateCertificatePath()
     {
-        return $this->getParameter('certificatePath');
+        return $this->getParameter('privateCertificatePath');
     }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPublicCertificatePath($value)
+    {
+        return $this->setParameter('publicCertificatePath', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublicCertificatePath()
+    {
+        return $this->getParameter('publicCertificatePath');
+    }
+
+
 
     /**
      * @return mixed

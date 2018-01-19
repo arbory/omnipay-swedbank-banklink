@@ -28,6 +28,7 @@ class PurchaseRequest extends AbstractRequest
 
     /**
      * @return array
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     private function getDecodedData(){
         $data = [
@@ -46,7 +47,7 @@ class PurchaseRequest extends AbstractRequest
      */
     private function generateControlCode($data)
     {
-        return Pizza::generateControlCode($data, $this->getEncoding(), $this->getCertificatePath());
+        return Pizza::generateControlCode($data, $this->getEncoding(), $this->getPrivateCertificatePath());
     }
 
     /**
@@ -67,7 +68,8 @@ class PurchaseRequest extends AbstractRequest
 
     /**
      * Glue together encoded and raw data
-     * @return array
+     * @return array|mixed
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     public function getData()
     {

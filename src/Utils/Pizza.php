@@ -9,14 +9,13 @@ namespace Omnipay\SwedbankBanklink\Utils;
 class Pizza
 {
     // Returns base64 encoded control code
-    public static function generateControlCode(array $data, $encoding, $privateCertPath)
+    public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase = null)
     {
         $hash = self::createHash($data, $encoding);
 
         // Compute controlCode
-        //TODO: add passphrase?
         $certContent = file_get_contents($privateCertPath);
-        $privateKey = openssl_get_privatekey($certContent);
+        $privateKey = openssl_get_privatekey($certContent, $passPhrase);
         openssl_sign($hash, $controlCode, $privateKey);
         openssl_free_key($privateKey);
 
@@ -42,15 +41,12 @@ class Pizza
      * @return bool
      * @throws \RuntimeException
      */
-    public static function isValidControlCode(array $data, $controlCodeEncoded, $privateCertPath, $encoding)
+    public static function isValidControlCode(array $data, $signatureEncoded, $publicCertPath, $encoding)
     {
         $hash = self::createHash($data, $encoding);
-        $signature = base64_decode($controlCodeEncoded);
-        $certContent = file_get_contents($privateCertPath);
-        $privateKey = openssl_get_privatekey($certContent);
-        // Public key as PEM string
-        $pemPublicKey = openssl_pkey_get_details($privateKey)['key'];
-        $publicKey = openssl_get_publickey($pemPublicKey);
+        $signature = base64_decode($signatureEncoded);
+        $certContent = file_get_contents($publicCertPath);
+        $publicKey = openssl_get_publickey($certContent);
 
         if($publicKey === false){
             throw new \RuntimeException('Certificate error :' . openssl_error_string());
@@ -59,7 +55,6 @@ class Pizza
         $result = openssl_verify($hash, $signature, $publicKey);
 
         openssl_free_key($publicKey);
-        openssl_free_key($privateKey);
 
         if($result !== 1 && $result !== 0){
             // OpenSSL error, problem with pem certificate
@@ -76,9 +71,9 @@ class Pizza
      * @param       $encoding
      * @return bool
      */
-    public static function test(array $data, $privateCertPath, $encoding)
+    public static function test(array $data, $privateCertPath, $encoding, $passPhrase = null)
     {
-        $cCode = self::generateControlCode($data, $encoding, $privateCertPath);
+        $cCode = self::generateControlCode($data, $encoding, $privateCertPath, $passPhrase);
         $result = self::isValidControlCode($data, $cCode, $privateCertPath, $encoding);
         return $result;
     }

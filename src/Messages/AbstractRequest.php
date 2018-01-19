@@ -67,17 +67,34 @@ abstract class AbstractRequest extends CommonAbstractRequest
      * @param string $value
      * @return $this
      */
-    public function setCertificatePath($value)
+    public function setPublicCertificatePath($value)
     {
-        return $this->setParameter('certificatePath', $value);
+        return $this->setParameter('publicCertificatePath', $value);
     }
 
     /**
      * @return string
      */
-    public function getCertificatePath()
+    public function getPublicCertificatePath()
     {
-        return $this->getParameter('certificatePath');
+        return $this->getParameter('publicCertificatePath');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPrivateCertificatePath($value)
+    {
+        return $this->setParameter('privateCertificatePath', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivateCertificatePath()
+    {
+        return $this->getParameter('privateCertificatePath');
     }
 
     /**
@@ -113,21 +130,4 @@ abstract class AbstractRequest extends CommonAbstractRequest
     {
         return $this->getParameter('gatewayUrl');
     }
-
-    /**
-     * @param mixed $data
-     * @return \Guzzle\Http\Message\Response
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
-     */
-    public function sendData($data)
-    {
-        $this->validate('certificatePath');
-        // Create fake response flow, so that user can be redirected
-        /** @var AbstractResponse $purchaseResponseObj */
-        $purchaseResponseObj = $this->createResponse($data);
-        $purchaseResponseObj->setReturnUrl($this->getReturnUrl());
-        $purchaseResponseObj->setGatewayUrl($this->getGatewayUrl());
-        return $purchaseResponseObj;
-    }
-
 }

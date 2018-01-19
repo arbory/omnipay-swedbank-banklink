@@ -2,6 +2,7 @@
 
 namespace Omnipay\SwedbankBanklink\Messages;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\SwedbankBanklink\Utils\Pizza;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -54,16 +55,7 @@ class CompleteRequest extends AbstractRequest
 
     public function getData()
     {
-        /** @var ParameterBag $queryObj */
-        $queryObj = $this->httpRequest->query;
-
-        $result = $this->isValidResponse($errMessages);
-
-        if($result) {
-            return $queryObj->all();
-        }else{
-            throw new InvalidResponseException(join(';', $errMessages));
-        }
+        return $this->httpRequest->request->all();
     }
 
     /*
@@ -76,39 +68,61 @@ class CompleteRequest extends AbstractRequest
     }
 
     /**
-     * @return bool
+     * @param mixed $data
+     * @return \Omnipay\Common\Message\ResponseInterface|AbstractResponse|CompleteResponse
+     * @throws InvalidRequestException
      */
-    protected function isValidResponse(&$errMessages)
+    public function sendData($data)
     {
-        $errMessages = [];
-        $queryObj = $this->httpRequest->query;
+        //Validate response data before we process further
+        $this->validate();
 
-        if (in_array($queryObj->get('VK_SERVICE'), ['1101', '1901'])) {
-            $responseKeys = $queryObj->get('VK_SERVICE') == '1101' ? $this->successResponse : $this->errorResponse;
+        // Create fake response flow
+        /** @var CompleteResponse $purchaseResponseObj */
+        $response = $this->createResponse($data);
+        return $response;
+    }
 
-            // Get keys that are required for control code generation
-            $controlCodeKeys = array_filter($responseKeys, function($val){ return $val; });
-
-            // Get control code required fields with values
-            $controlCodeFields = array_intersect_key( $queryObj->all(), $controlCodeKeys );
-
-            if(count($controlCodeFields) != count ($controlCodeKeys)){
-                $errMessages[] = 'Required fields are missing in response';
-            }
-
-            //If you are testing requests by spoofing manually bank response, don't forget to url encode VK_MAC value
-            //https://stackoverflow.com/questions/5628738/strange-base64-encode-decode-problem
-            //$test = Pizza::test($controlCodeFields, $this->getCertificatePath(), $this->getEncoding());
-
-            if(!Pizza::isValidControlCode($controlCodeFields, $queryObj->get('VK_MAC'), $this->getCertificatePath(), $this->getEncoding())){
-                $errMessages[] = 'Invalid control code';
-            }else{
-                return true;
-            }
-        } else {
-            $errMessages[] = 'Unsupported service ID:' . intval($queryObj->get('VK_SERVICE'));
+    public function validate()
+    {
+        $response = $this->getData();
+        if(!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1101', '1901']))
+        {
+            throw new InvalidRequestException('Unknown VK_SERVICE code');
         }
 
-        return false;
+        $responseFields = $response['VK_SERVICE'] == '1101' ? $this->successResponse : $this->errorResponse;
+
+        //check for missing fields, will throw exc. on missing fields
+        foreach ($responseFields as $fieldName => $usedInHash ) {
+            if (! isset($response[$fieldName])) {
+                throw new InvalidRequestException("The $fieldName parameter is required");
+            }
+        }
+
+        //verify data corruption
+        $this->validateIntegrity($responseFields);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function validateIntegrity(array $responseFields)
+    {
+        $responseData = new ParameterBag($this->getData());
+
+        // Get keys that are required for control code generation
+        $controlCodeKeys = array_filter($responseFields, function($val){ return $val; });
+
+        // Get control code required fields with values
+        $controlCodeFields = array_intersect_key( $responseData->all(), $controlCodeKeys );
+
+        //If you are testing requests by spoofing manually bank response, don't forget to url encode VK_MAC value
+        //https://stackoverflow.com/questions/5628738/strange-base64-encode-decode-problem
+        //$test = Pizza::test($controlCodeFields, $this->getCertificatePath(), $this->getEncoding());
+
+        if(!Pizza::isValidControlCode($controlCodeFields, $responseData->get('VK_MAC'), $this->getPublicCertificatePath(), $this->getEncoding())){
+            throw new InvalidRequestException('Data is corrupt or has been changed by a third party');
+        }
     }
 }

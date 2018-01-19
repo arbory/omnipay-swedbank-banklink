@@ -2,17 +2,20 @@
 
 namespace Omnipay\SwedbankBanklink\Messages;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Omnipay\SwedbankBanklink\Utils\Pizza;
+
 class CompleteResponse extends AbstractResponse
 {
     /**
-     * Use only RESULT data to determine transactions state
-     * Other fields are for debugging and logging!
-     * This is from Payeezy IP admin manual
      * @return bool
      */
     public function isSuccessful()
     {
-        return $this->data['VK_SERVICE'] == '1101';
+        if ($this->data['VK_SERVICE'] == '1101') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -26,11 +29,24 @@ class CompleteResponse extends AbstractResponse
         return $this->data['VK_SERVICE'] == '1901';
     }
 
+    public function getMessage()
+    {
+        if($this->data['VK_SERVICE'] == '1901'){
+            return "Timeout or user canceled payment";
+        }
+        return "Unknown error";
+    }
+
     /**
      * @return mixed
      */
     public function getCode()
     {
         return $this->data['VK_SERVICE'];
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 }
