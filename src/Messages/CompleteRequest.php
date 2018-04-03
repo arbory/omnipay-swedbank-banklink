@@ -55,7 +55,11 @@ class CompleteRequest extends AbstractRequest
 
     public function getData()
     {
-        return $this->httpRequest->request->all();
+        if($this->httpRequest->getMethod() == 'POST'){
+            return $this->httpRequest->request->all();
+        }else{
+            return $this->httpRequest->query->all();
+        }
     }
 
     /*
