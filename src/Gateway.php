@@ -30,7 +30,7 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'gatewayUrl'           => 'https://ib.swedbank.lv/banklink/',
+            'gatewayUrl'           => 'https://www.swedbank.lv/banklink/',
             'merchantId'            => '', //VK_SND_ID
             'returnUrl'             => '',
             'privateCertificatePath' => '',
