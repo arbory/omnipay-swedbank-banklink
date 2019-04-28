@@ -18,5 +18,8 @@
         <whitelist>
             <directory>./src</directory>
         </whitelist>
-    </filter>
+      </filter>
+    <logging>
+        <log type="coverage-html" target="coverage"/>
+    </logging>
 </phpunit>
