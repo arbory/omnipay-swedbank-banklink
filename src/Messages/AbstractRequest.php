@@ -2,7 +2,7 @@
 
 namespace Omnipay\SwedbankBanklink\Messages;
 
-use  Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
+use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 
 abstract class AbstractRequest extends CommonAbstractRequest
 {

@@ -68,7 +68,7 @@ class Gateway extends AbstractGateway
      */
     public function setGatewayUrl($value)
     {
-        $this->setParameter('gatewayUrl', $value);
+        return $this->setParameter('gatewayUrl', $value);
     }
 
     /**
@@ -85,7 +85,7 @@ class Gateway extends AbstractGateway
      */
     public function setMerchantId($value)
     {
-        $this->setParameter('merchantId', $value);
+        return $this->setParameter('merchantId', $value);
     }
 
     /**
@@ -102,7 +102,7 @@ class Gateway extends AbstractGateway
      */
     public function setReturnUrl($value)
     {
-        $this->setParameter('returnUrl', $value);
+        return $this->setParameter('returnUrl', $value);
     }
 
     /**
@@ -162,7 +162,7 @@ class Gateway extends AbstractGateway
      */
     public function setLanguage($value)
     {
-        $this->setParameter('language', $value);
+        return $this->setParameter('language', $value);
     }
 
     /**
@@ -178,8 +178,6 @@ class Gateway extends AbstractGateway
      */
     public function setEncoding($value)
     {
-        $this->setParameter('encoding', $value);
+        return $this->setParameter('encoding', $value);
     }
-
-
 }

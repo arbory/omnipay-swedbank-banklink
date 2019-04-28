@@ -1,6 +1,3 @@
-# omnipay-swedbank-banklink
+# Omnipay: Swedbank Banklink
 
-## TODO:
-- [x] : Return auto-submit form as redirect function. No need to redirect and then read from session variables.
-- [ ] : Implement authorization
-- [ ] : Check banklink VK_REF and VK_STAMP usage in purchase. VK_REF used in accounting as orders/purchases unique id?
+[![Build Status](https://travis-ci.org/arbory/omnipay-swedbank-banklink.svg?branch=master)](https://travis-ci.org/arbory/omnipay-swedbank-banklink)

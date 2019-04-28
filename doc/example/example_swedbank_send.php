@@ -13,7 +13,7 @@ header ('Content-type: text/html; charset=utf-8'); // Set header to UTF-8
 ini_set('default_charset', 'UTF-8'); // Set default charser to UTF-8
 mb_internal_encoding("utf-8"); // Set internal character encoding to UTF-8
 
-define('POST_URL',		'https://www.swedbank.lv/banklink/'); // Bank link
+define('POST_URL',		'https://ib.swedbank.lv/banklink/'); // Bank link
 define('VK_SND_ID',		'YOURID'); // Your ID
 define('RETURN_URL',	'https://example.lv/example_swedbank_return.php'); // Return url
 define('KEY_LOCATION',	realpath('../').'/certs'); // Folder where are certificates
