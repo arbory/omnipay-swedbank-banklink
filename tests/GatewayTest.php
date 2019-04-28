@@ -42,6 +42,8 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isPending());
         $this->assertFalse($response->isSuccessful());
         $this->assertTrue($response->isRedirect());
+        $this->assertTrue($response->isTransparentRedirect());
+        $this->assertEquals('POST', $response->getRedirectMethod());
         $this->assertEquals('https://www.swedbank.lv/banklink/', $response->getRedirectUrl());
 
         $this->assertEquals(array(
@@ -58,6 +60,8 @@ class GatewayTest extends GatewayTestCase
             'VK_LANG' => 'LAT',
             'VK_ENCODING' => 'UTF-8',
         ), $response->getData());
+
+        $this->assertEquals($response->getData(), $response->getRedirectData());
     }
 
     public function testPurchaseCompleteSuccess()
@@ -84,14 +88,53 @@ class GatewayTest extends GatewayTestCase
             'VK_MAC' => 'uHB+cjwJa7O1eCo/mwh81aAy9esSTEmExdKvWDxZrK3pn3l/Utr5Sy1vnDUzJSWGq24tBTA3saCmoVZON1FW1XRIwFyd04rhEXG2VwX+zLTzUKOEM+K98Xzs2HX8jAytjlsF2XlJYbxNM3hBej8MndvRHaBYNCl6h4Lv/y9js2z05mi2tTHKamK4w5kVOTDkV1Za0Aafx2rFoQMMqFmE+26TUcUx+Q8IvJ6vGM5+VRnCsCKzQxzN4YYftRFJo+8SHefsdhNirr10UHbkwJFNzhyuKjeEkOglCaEcq+syOhY9MDQ58AVY50vs1/q42dXicv+fTNFvu6tglSNDQJ7Ikg=='
         );
 
-        $this->getHttpRequest()->query->replace($postData);
+        $this->getHttpRequest()->setMethod('POST');
+        $this->getHttpRequest()->request->replace($postData);
 
         $response = $this->gateway->completePurchase($this->options)->send();
 
         $this->assertFalse($response->isPending());
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
+        $this->assertFalse($response->isCancelled());
         $this->assertSame('abc123', $response->getTransactionReference());
+        $this->assertSame('', $response->getMessage());
+    }
+
+    public function testPurchaseCompleteSuccessWithGET()
+    {
+        $getData = array(
+            'VK_SERVICE' => '1101',
+            'VK_VERSION' => '008',
+            'VK_SND_ID' => 'HP',
+            'VK_REC_ID' => 'REFEREND',
+            'VK_STAMP' => 'abc123',
+            'VK_T_NO' => '169',
+            'VK_AMOUNT' => '10.00',
+            'VK_CURR' => 'EUR',
+            'VK_REC_ACC' => 'XXXXXXXXXX',
+            'VK_REC_NAME' => 'Shop',
+            'VK_SND_ACC' => 'XXXXXXXXXXXX',
+            'VK_SND_NAME' => 'John Mayer',
+            'VK_REF' => 'abc123',
+            'VK_MSG' => 'Payment for order 1231223',
+            'VK_T_DATE' => '10.03.2019',
+            'VK_LANG' => 'LAT',
+            'VK_AUTO' => 'N',
+            'VK_ENCODING' => 'UTF-8',
+            'VK_MAC' => 'uHB+cjwJa7O1eCo/mwh81aAy9esSTEmExdKvWDxZrK3pn3l/Utr5Sy1vnDUzJSWGq24tBTA3saCmoVZON1FW1XRIwFyd04rhEXG2VwX+zLTzUKOEM+K98Xzs2HX8jAytjlsF2XlJYbxNM3hBej8MndvRHaBYNCl6h4Lv/y9js2z05mi2tTHKamK4w5kVOTDkV1Za0Aafx2rFoQMMqFmE+26TUcUx+Q8IvJ6vGM5+VRnCsCKzQxzN4YYftRFJo+8SHefsdhNirr10UHbkwJFNzhyuKjeEkOglCaEcq+syOhY9MDQ58AVY50vs1/q42dXicv+fTNFvu6tglSNDQJ7Ikg=='
+        );
+
+        $this->getHttpRequest()->query->replace($getData);
+
+        $response = $this->gateway->completePurchase($this->options)->send();
+
+        $this->assertFalse($response->isPending());
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertFalse($response->isCancelled());
+        $this->assertSame('abc123', $response->getTransactionReference());
+        $this->assertSame('', $response->getMessage());
     }
 
     public function testPurchaseCompleteFailed()
@@ -118,7 +161,9 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isPending());
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
+        $this->assertTrue($response->isCancelled());
         $this->assertSame('abc123', $response->getTransactionReference());
+        $this->assertSame('Timeout or user canceled payment', $response->getMessage());
     }
 
     public function testPurchaseCompleteFailedWithForgedSignature()
@@ -149,6 +194,37 @@ class GatewayTest extends GatewayTestCase
     {
         $postData = array(
             'some_param' => 'x',
+        );
+
+        $this->getHttpRequest()->query->replace($postData);
+
+        $this->expectException(\Omnipay\Common\Exception\InvalidRequestException::class);
+
+        $response = $this->gateway->completePurchase($this->options)->send();
+    }
+
+    // test with missing VK_REF parameter
+    public function testPurchaseCompleteFailedWithIncompleteRequest()
+    {
+        $postData = array(
+            'VK_SERVICE' => '1101',
+            'VK_VERSION' => '008',
+            'VK_SND_ID' => 'HP',
+            'VK_REC_ID' => 'REFEREND',
+            'VK_STAMP' => 'abc123',
+            'VK_T_NO' => '169',
+            'VK_AMOUNT' => '10.00',
+            'VK_CURR' => 'EUR',
+            'VK_REC_ACC' => 'XXXXXXXXXX',
+            'VK_REC_NAME' => 'Shop',
+            'VK_SND_ACC' => 'XXXXXXXXXXXX',
+            'VK_SND_NAME' => 'John Mayer',
+            'VK_MSG' => 'Payment for order 1231223',
+            'VK_T_DATE' => '10.03.2019',
+            'VK_LANG' => 'LAT',
+            'VK_AUTO' => 'N',
+            'VK_ENCODING' => 'UTF-8',
+            'VK_MAC' => 'uHB+cjwJa7O1eCo/mwh81aAy9esSTEmExdKvWDxZrK3pn3l/Utr5Sy1vnDUzJSWGq24tBTA3saCmoVZON1FW1XRIwFyd04rhEXG2VwX+zLTzUKOEM+K98Xzs2HX8jAytjlsF2XlJYbxNM3hBej8MndvRHaBYNCl6h4Lv/y9js2z05mi2tTHKamK4w5kVOTDkV1Za0Aafx2rFoQMMqFmE+26TUcUx+Q8IvJ6vGM5+VRnCsCKzQxzN4YYftRFJo+8SHefsdhNirr10UHbkwJFNzhyuKjeEkOglCaEcq+syOhY9MDQ58AVY50vs1/q42dXicv+fTNFvu6tglSNDQJ7Ikg=='
         );
 
         $this->getHttpRequest()->query->replace($postData);

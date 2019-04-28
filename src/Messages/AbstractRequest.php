@@ -9,24 +9,6 @@ abstract class AbstractRequest extends CommonAbstractRequest
     /**
      * @return mixed
      */
-    public function getControlCode()
-    {
-        return $this->getParameter('controlCode');
-    }
-
-    /**
-     * @param mixed $controlCode
-     */
-    public function setControlCode($value)
-    {
-        return $this->setParameter('controlCode', $value);
-    }
-
-
-
-    /**
-     * @return mixed
-     */
     public function getEncoding()
     {
         return $this->getParameter('encoding');
