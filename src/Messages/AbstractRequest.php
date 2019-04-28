@@ -73,6 +73,23 @@ abstract class AbstractRequest extends CommonAbstractRequest
     }
 
     /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPrivateCertificatePassphrase($value)
+    {
+        return $this->setParameter('privateCertificatePassphrase', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivateCertificatePassphrase()
+    {
+        return $this->getParameter('privateCertificatePassphrase');
+    }
+
+    /**
      * @return mixed
      */
     public function getLanguage()

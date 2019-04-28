@@ -64,6 +64,40 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals($response->getData(), $response->getRedirectData());
     }
 
+    public function testPurchaseSuccessWithPassphrasedPrivateKey()
+    {
+        $options = $this->options;
+        $options['privateCertificatePath'] = 'tests/Fixtures/key_with_passphrase.pem';
+        $options['privateCertificatePassphrase'] = 'foobar';
+
+        $response = $this->gateway->purchase($options)->send();
+
+        $this->assertInstanceOf('\Omnipay\SwedbankBanklink\Messages\PurchaseResponse', $response);
+        $this->assertFalse($response->isPending());
+        $this->assertFalse($response->isSuccessful());
+        $this->assertTrue($response->isRedirect());
+        $this->assertTrue($response->isTransparentRedirect());
+        $this->assertEquals('POST', $response->getRedirectMethod());
+        $this->assertEquals('https://www.swedbank.lv/banklink/', $response->getRedirectUrl());
+
+        $this->assertEquals(array(
+            'VK_SERVICE' => 1002,
+            'VK_VERSION' => '008',
+            'VK_SND_ID' => '1',
+            'VK_STAMP' => 'abc123',
+            'VK_AMOUNT' => '10.00',
+            'VK_CURR' => 'EUR',
+            'VK_REF' => 'abc123',
+            'VK_MSG' => 'purchase description',
+            'VK_MAC' => 'j6dRFu5rszWnYw4S2g1r0cdxDJ8Es7SUOgQpmMQ0j5vjJZgCjf+0I9EfbvEZwseoiRWKO0CRi/pIdXxD6DNLpTCMe9GBgEKw7H2jzhPl+0VcZYThu/Gbt4F97A3vSk+jhmwbVuG991qFuEQUpA3IA8QPJ811VRjpCDEvv1Sz6zbivhIUHXYS2E3HpqWS85dnTFE6SqpXI37wzKMli3GUe8STHATfL4Vv6APNz5LSD4E6yituf95h2B5PbWeVEV9Sxf1FcLg8cXpTMRnlvdsqGZf0kOP0iYHEYwESvtmLbAzREe/cjt/j5Hsmsm6D1SLIbzFMyFwjterX8PwIpikrMw==',
+            'VK_RETURN' => 'http://localhost:8080/omnipay/banklink/',
+            'VK_LANG' => 'LAT',
+            'VK_ENCODING' => 'UTF-8',
+        ), $response->getData());
+
+        $this->assertEquals($response->getData(), $response->getRedirectData());
+    }
+
     public function testPurchaseCompleteSuccess()
     {
         $postData = array(

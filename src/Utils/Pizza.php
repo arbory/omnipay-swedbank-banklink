@@ -10,7 +10,7 @@ namespace Omnipay\SwedbankBanklink\Utils;
 class Pizza
 {
     // Returns base64 encoded control code
-    public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase = null)
+    public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase)
     {
         $hash = self::createHash($data, $encoding);
 
