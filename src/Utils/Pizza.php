@@ -57,11 +57,6 @@ class Pizza
 
         openssl_free_key($publicKey);
 
-        if ($result !== 1 && $result !== 0) {
-            // OpenSSL error, problem with pem certificate
-            throw new \RuntimeException('Verification error :' . openssl_error_string());
-        }
-
         return boolval($result);
     }
 }
