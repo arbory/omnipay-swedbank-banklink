@@ -55,9 +55,9 @@ class CompleteRequest extends AbstractRequest
 
     public function getData()
     {
-        if($this->httpRequest->getMethod() == 'POST'){
+        if ($this->httpRequest->getMethod() == 'POST') {
             return $this->httpRequest->request->all();
-        }else{
+        } else {
             return $this->httpRequest->query->all();
         }
     }
@@ -90,15 +90,14 @@ class CompleteRequest extends AbstractRequest
     public function validate()
     {
         $response = $this->getData();
-        if(!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1101', '1901']))
-        {
+        if (!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1101', '1901'])) {
             throw new InvalidRequestException('Unknown VK_SERVICE code');
         }
 
         $responseFields = $response['VK_SERVICE'] == '1101' ? $this->successResponse : $this->errorResponse;
 
         //check for missing fields, will throw exc. on missing fields
-        foreach ($responseFields as $fieldName => $usedInHash ) {
+        foreach ($responseFields as $fieldName => $usedInHash) {
             if (! isset($response[$fieldName])) {
                 throw new InvalidRequestException("The $fieldName parameter is required");
             }
@@ -116,17 +115,36 @@ class CompleteRequest extends AbstractRequest
         $responseData = new ParameterBag($this->getData());
 
         // Get keys that are required for control code generation
-        $controlCodeKeys = array_filter($responseFields, function($val){ return $val; });
+        $controlCodeKeys = array_filter($responseFields, function ($val) {
+            return $val;
+        });
 
         // Get control code required fields with values
-        $controlCodeFields = array_intersect_key( $responseData->all(), $controlCodeKeys );
+        $controlCodeFields = array_intersect_key($responseData->all(), $controlCodeKeys);
 
-        //If you are testing requests by spoofing manually bank response, don't forget to url encode VK_MAC value
-        //https://stackoverflow.com/questions/5628738/strange-base64-encode-decode-problem
-        //$test = Pizza::test($controlCodeFields, $this->getCertificatePath(), $this->getEncoding());
-
-        if(!Pizza::isValidControlCode($controlCodeFields, $responseData->get('VK_MAC'), $this->getPublicCertificatePath(), $this->getEncoding())){
+        if (!Pizza::isValidControlCode(
+            $controlCodeFields,
+            $responseData->get('VK_MAC'),
+            $this->getPublicCertificatePath(),
+            $this->getEncoding()
+        )) {
             throw new InvalidRequestException('Data is corrupt or has been changed by a third party');
         }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setMerchantId($value)
+    {
+        $this->setParameter('merchantId', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMerchantId()
+    {
+        return $this->getParameter('merchantId');
     }
 }

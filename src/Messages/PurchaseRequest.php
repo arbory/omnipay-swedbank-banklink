@@ -30,7 +30,8 @@ class PurchaseRequest extends AbstractRequest
      * @return array
      * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
-    private function getDecodedData(){
+    private function getDecodedData()
+    {
         $data = [
             'VK_MAC'        => $this->generateControlCode($this->getEncodedData()), // MAC - Control code / signature
             'VK_RETURN'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
@@ -47,7 +48,12 @@ class PurchaseRequest extends AbstractRequest
      */
     private function generateControlCode($data)
     {
-        return Pizza::generateControlCode($data, $this->getEncoding(), $this->getPrivateCertificatePath());
+        return Pizza::generateControlCode(
+            $data,
+            $this->getEncoding(),
+            $this->getPrivateCertificatePath(),
+            $this->getPrivateCertificatePassphrase()
+        );
     }
 
     /**

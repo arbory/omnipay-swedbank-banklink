@@ -13,9 +13,6 @@ use Omnipay\SwedbankBanklink\Messages\CompleteRequest;
  */
 class Gateway extends AbstractGateway
 {
-
-
-
     /**
      * @return string
      */
@@ -35,6 +32,7 @@ class Gateway extends AbstractGateway
             'returnUrl'             => '',
             'privateCertificatePath' => '',
             'publicCertificatePath' => '',
+            'privateCertificatePassphrase' => null,
 
             //Global parameters for requests will be set via gateway
             'language'              => 'LAT',
@@ -68,7 +66,7 @@ class Gateway extends AbstractGateway
      */
     public function setGatewayUrl($value)
     {
-        $this->setParameter('gatewayUrl', $value);
+        return $this->setParameter('gatewayUrl', $value);
     }
 
     /**
@@ -85,7 +83,7 @@ class Gateway extends AbstractGateway
      */
     public function setMerchantId($value)
     {
-        $this->setParameter('merchantId', $value);
+        return $this->setParameter('merchantId', $value);
     }
 
     /**
@@ -102,7 +100,7 @@ class Gateway extends AbstractGateway
      */
     public function setReturnUrl($value)
     {
-        $this->setParameter('returnUrl', $value);
+        return $this->setParameter('returnUrl', $value);
     }
 
     /**
@@ -128,6 +126,23 @@ class Gateway extends AbstractGateway
     public function getPrivateCertificatePath()
     {
         return $this->getParameter('privateCertificatePath');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPrivateCertificatePassphrase($value)
+    {
+        return $this->setParameter('privateCertificatePassphrase', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivateCertificatePassphrase()
+    {
+        return $this->getParameter('privateCertificatePassphrase');
     }
 
     /**
@@ -162,7 +177,7 @@ class Gateway extends AbstractGateway
      */
     public function setLanguage($value)
     {
-        $this->setParameter('language', $value);
+        return $this->setParameter('language', $value);
     }
 
     /**
@@ -178,8 +193,6 @@ class Gateway extends AbstractGateway
      */
     public function setEncoding($value)
     {
-        $this->setParameter('encoding', $value);
+        return $this->setParameter('encoding', $value);
     }
-
-
 }

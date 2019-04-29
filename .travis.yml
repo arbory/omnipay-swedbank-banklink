@@ -1,0 +1,26 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+
+env:
+  global:
+    - setup=basic
+
+
+sudo: false
+
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist
+
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpcs --standard=PSR2 src
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v

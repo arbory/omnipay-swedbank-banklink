@@ -12,9 +12,12 @@
       "psr-4": { "Omnipay\\SwedbankBanklink\\" : "src/" }
     },
     "require": {
-      "omnipay/common": "~2.0"
+      "omnipay/common": "~3.0"
     },
     "require-dev": {
-      "omnipay/tests": "~2.0"
+      "omnipay/tests": "~3.0",
+      "squizlabs/php_codesniffer": "^3",
+      "phpro/grumphp": "^0.14",
+        "php-coveralls/php-coveralls": "^2.1"
     }
 }

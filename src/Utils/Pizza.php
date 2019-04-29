@@ -1,6 +1,7 @@
 <?php
 
 namespace Omnipay\SwedbankBanklink\Utils;
+
 /**
  * Pizza protocol helper functions
  *
@@ -9,7 +10,7 @@ namespace Omnipay\SwedbankBanklink\Utils;
 class Pizza
 {
     // Returns base64 encoded control code
-    public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase = null)
+    public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase)
     {
         $hash = self::createHash($data, $encoding);
 
@@ -48,7 +49,7 @@ class Pizza
         $certContent = file_get_contents($publicCertPath);
         $publicKey = openssl_get_publickey($certContent);
 
-        if($publicKey === false){
+        if ($publicKey === false) {
             throw new \RuntimeException('Certificate error :' . openssl_error_string());
         }
 
@@ -56,26 +57,6 @@ class Pizza
 
         openssl_free_key($publicKey);
 
-        if($result !== 1 && $result !== 0){
-            // OpenSSL error, problem with pem certificate
-            throw new \RuntimeException('Verification error :' . openssl_error_string());
-        }
-
         return boolval($result);
     }
-
-    /**
-     * Test encoding/decoding by comparing results, this will allow also help debugging certificate file problems
-     * @param array $data
-     * @param       $privateCertPath
-     * @param       $encoding
-     * @return bool
-     */
-    public static function test(array $data, $privateCertPath, $encoding, $passPhrase = null)
-    {
-        $cCode = self::generateControlCode($data, $encoding, $privateCertPath, $passPhrase);
-        $result = self::isValidControlCode($data, $cCode, $privateCertPath, $encoding);
-        return $result;
-    }
-
 }

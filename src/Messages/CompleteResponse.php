@@ -31,18 +31,10 @@ class CompleteResponse extends AbstractResponse
 
     public function getMessage()
     {
-        if($this->data['VK_SERVICE'] == '1901'){
+        if ($this->data['VK_SERVICE'] == '1901') {
             return "Timeout or user canceled payment";
         }
-        return "Unknown error";
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCode()
-    {
-        return $this->data['VK_SERVICE'];
+        return "";
     }
 
     public function getData()

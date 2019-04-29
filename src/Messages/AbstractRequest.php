@@ -2,28 +2,10 @@
 
 namespace Omnipay\SwedbankBanklink\Messages;
 
-use  Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
+use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 
 abstract class AbstractRequest extends CommonAbstractRequest
 {
-    /**
-     * @return mixed
-     */
-    public function getControlCode()
-    {
-        return $this->getParameter('controlCode');
-    }
-
-    /**
-     * @param mixed $controlCode
-     */
-    public function setControlCode($value)
-    {
-        return $this->setParameter('controlCode', $value);
-    }
-
-
-
     /**
      * @return mixed
      */
@@ -88,6 +70,23 @@ abstract class AbstractRequest extends CommonAbstractRequest
     public function getPrivateCertificatePath()
     {
         return $this->getParameter('privateCertificatePath');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPrivateCertificatePassphrase($value)
+    {
+        return $this->setParameter('privateCertificatePassphrase', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivateCertificatePassphrase()
+    {
+        return $this->getParameter('privateCertificatePassphrase');
     }
 
     /**
