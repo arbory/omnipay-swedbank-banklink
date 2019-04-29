@@ -129,10 +129,11 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertFalse($response->isPending());
         $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isServerToServerRequest());
         $this->assertFalse($response->isRedirect());
         $this->assertFalse($response->isCancelled());
         $this->assertSame('abc123', $response->getTransactionReference());
-        $this->assertSame('', $response->getMessage());
+        $this->assertSame('Payment was successful', $response->getMessage());
     }
 
     public function testPurchaseCompleteSuccessWithGET()
@@ -154,7 +155,7 @@ class GatewayTest extends GatewayTestCase
             'VK_MSG' => 'Payment for order 1231223',
             'VK_T_DATE' => '10.03.2019',
             'VK_LANG' => 'LAT',
-            'VK_AUTO' => 'N',
+            'VK_AUTO' => 'Y',
             'VK_ENCODING' => 'UTF-8',
             'VK_MAC' => 'uHB+cjwJa7O1eCo/mwh81aAy9esSTEmExdKvWDxZrK3pn3l/Utr5Sy1vnDUzJSWGq24tBTA3saCmoVZON1FW1XRIwFyd04rhEXG2VwX+zLTzUKOEM+K98Xzs2HX8jAytjlsF2XlJYbxNM3hBej8MndvRHaBYNCl6h4Lv/y9js2z05mi2tTHKamK4w5kVOTDkV1Za0Aafx2rFoQMMqFmE+26TUcUx+Q8IvJ6vGM5+VRnCsCKzQxzN4YYftRFJo+8SHefsdhNirr10UHbkwJFNzhyuKjeEkOglCaEcq+syOhY9MDQ58AVY50vs1/q42dXicv+fTNFvu6tglSNDQJ7Ikg=='
         );
@@ -165,10 +166,11 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertFalse($response->isPending());
         $this->assertTrue($response->isSuccessful());
+        $this->assertTrue($response->isServerToServerRequest());
         $this->assertFalse($response->isRedirect());
         $this->assertFalse($response->isCancelled());
         $this->assertSame('abc123', $response->getTransactionReference());
-        $this->assertSame('', $response->getMessage());
+        $this->assertSame('Payment was successful', $response->getMessage());
     }
 
     public function testPurchaseCompleteFailed()
@@ -212,7 +214,7 @@ class GatewayTest extends GatewayTestCase
             'VK_REF' => 'abc123',
             'VK_MSG' => 'Payment for order 1231223',
             'VK_LANG' => 'LAT',
-            'VK_AUTO' => 'N',
+            'VK_AUTO' => 'Y',
             'VK_ENCODING' => 'UTF-8',
             'VK_MAC' => 'FORGED_SIGNATURE'
         );

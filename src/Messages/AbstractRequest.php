@@ -9,22 +9,6 @@ abstract class AbstractRequest extends CommonAbstractRequest
     /**
      * @return mixed
      */
-    public function getEncoding()
-    {
-        return $this->getParameter('encoding');
-    }
-
-    /**
-     * @param mixed $encoding
-     */
-    public function setEncoding($value)
-    {
-        return $this->setParameter('encoding', $value);
-    }
-
-    /**
-     * @return mixed
-     */
     public function getReturnUrl()
     {
         return $this->getParameter('returnUrl');

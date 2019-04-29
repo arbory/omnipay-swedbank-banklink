@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class CompleteRequest extends AbstractRequest
 {
+    protected const ENCODING_UTF_8 = 'UTF-8';
+
     /**
      * array with required response keys, boolean shows if field used for control code calculation
      * @var array
@@ -126,7 +128,7 @@ class CompleteRequest extends AbstractRequest
             $controlCodeFields,
             $responseData->get('VK_MAC'),
             $this->getPublicCertificatePath(),
-            $this->getEncoding()
+            self::ENCODING_UTF_8
         )) {
             throw new InvalidRequestException('Data is corrupt or has been changed by a third party');
         }

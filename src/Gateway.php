@@ -36,7 +36,6 @@ class Gateway extends AbstractGateway
 
             //Global parameters for requests will be set via gateway
             'language'              => 'LAT',
-            'encoding'              => 'UTF-8'
         );
     }
 
@@ -178,21 +177,5 @@ class Gateway extends AbstractGateway
     public function setLanguage($value)
     {
         return $this->setParameter('language', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEncoding()
-    {
-        return $this->getParameter('encoding');
-    }
-
-    /**
-     * @param $value
-     */
-    public function setEncoding($value)
-    {
-        return $this->setParameter('encoding', $value);
     }
 }

@@ -8,7 +8,6 @@ abstract class AbstractResponse extends CommonAbstractResponse
 {
     public function getTransactionReference()
     {
-        $data = $this->getData();
-        return $data['VK_REF'] ?? $data['VK_REF'];
+        return $this->data['VK_REF'] ?? $this->data['VK_REF'];
     }
 }
