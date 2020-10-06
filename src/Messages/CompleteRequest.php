@@ -81,7 +81,7 @@ class CompleteRequest extends AbstractRequest
     public function sendData($data)
     {
         //Validate response data before we process further
-        $this->validate();
+        $this->validateResponseParameters();
 
         // Create fake response flow
         /** @var CompleteResponse $purchaseResponseObj */
@@ -89,7 +89,7 @@ class CompleteRequest extends AbstractRequest
         return $response;
     }
 
-    public function validate()
+    protected function validateResponseParameters()
     {
         $response = $this->getData();
         if (!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1101', '1901'])) {
