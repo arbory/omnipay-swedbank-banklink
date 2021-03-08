@@ -98,13 +98,6 @@ class CompleteRequest extends AbstractRequest
 
         $responseFields = $response['VK_SERVICE'] == '1101' ? $this->successResponse : $this->errorResponse;
 
-        //check for missing fields, will throw exc. on missing fields
-        foreach ($responseFields as $fieldName => $usedInHash) {
-            if (! isset($response[$fieldName])) {
-                throw new InvalidRequestException("The $fieldName parameter is required");
-            }
-        }
-
         //verify data corruption
         $this->validateIntegrity($responseFields);
     }

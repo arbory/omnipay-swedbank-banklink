@@ -240,6 +240,38 @@ class GatewayTest extends GatewayTestCase
     }
 
     // test with missing VK_REF parameter
+    public function testPurchaseCompleteWithMissingFields()
+    {
+        // missing VK_T_NO here
+        $postData = array(
+            'VK_SERVICE' => '1101',
+            'VK_VERSION' => '008',
+            'VK_SND_ID' => 'HP',
+            'VK_REC_ID' => 'REFEREND',
+            'VK_STAMP' => 'abc123',
+            'VK_AMOUNT' => '10.00',
+            'VK_CURR' => 'EUR',
+            'VK_REC_ACC' => 'XXXXXXXXXX',
+            'VK_REC_NAME' => 'Shop',
+            'VK_SND_ACC' => 'XXXXXXXXXXXX',
+            'VK_SND_NAME' => 'John Mayer',
+            'VK_MSG' => 'Payment for order 1231223',
+            'VK_T_DATE' => '10.03.2019',
+            'VK_LANG' => 'LAT',
+            'VK_AUTO' => 'N',
+            'VK_ENCODING' => 'UTF-8',
+            'VK_MAC' => 'uHB+cjwJa7O1eCo/mwh81aAy9esSTEmExdKvWDxZrK3pn3l/Utr5Sy1vnDUzJSWGq24tBTA3saCmoVZON1FW1XRIwFyd04rhEXG2VwX+zLTzUKOEM+K98Xzs2HX8jAytjlsF2XlJYbxNM3hBej8MndvRHaBYNCl6h4Lv/y9js2z05mi2tTHKamK4w5kVOTDkV1Za0Aafx2rFoQMMqFmE+26TUcUx+Q8IvJ6vGM5+VRnCsCKzQxzN4YYftRFJo+8SHefsdhNirr10UHbkwJFNzhyuKjeEkOglCaEcq+syOhY9MDQ58AVY50vs1/q42dXicv+fTNFvu6tglSNDQJ7Ikg=='
+        );
+
+        $this->getHttpRequest()->query->replace($postData);
+
+        $this->expectException(\Omnipay\Common\Exception\InvalidRequestException::class);
+        $this->expectExceptionMessage('Data is corrupt or has been changed by a third party');
+
+        $response = $this->gateway->completePurchase($this->options)->send();
+    }
+
+    // test with missing VK_REF parameter
     public function testPurchaseCompleteFailedWithIncompleteRequest()
     {
         $postData = array(
@@ -266,6 +298,7 @@ class GatewayTest extends GatewayTestCase
         $this->getHttpRequest()->query->replace($postData);
 
         $this->expectException(\Omnipay\Common\Exception\InvalidRequestException::class);
+        $this->expectExceptionMessage('Data is corrupt or has been changed by a third party');
 
         $response = $this->gateway->completePurchase($this->options)->send();
     }
