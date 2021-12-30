@@ -47,15 +47,15 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals('https://www.swedbank.lv/banklink/', $response->getRedirectUrl());
 
         $this->assertEquals(array(
-            'VK_SERVICE' => 1002,
-            'VK_VERSION' => '008',
+            'VK_SERVICE' => 1012,
+            'VK_VERSION' => '009',
             'VK_SND_ID' => '1',
             'VK_STAMP' => 'abc123',
             'VK_AMOUNT' => '10.00',
             'VK_CURR' => 'EUR',
             'VK_REF' => 'abc123',
             'VK_MSG' => 'purchase description',
-            'VK_MAC' => 'vizso1yFuk6oSGjen3oEZLst01BoQin1Y8yuCLWLtoQ6GVRJueMDJVqw4fUZ+Zt17JgdTD/7kx/1USMlUOG2gQHQBVeTt2iMyl9QKjoBb9zGTGMSTiI35MnddIpaO0oLoMZ9PRuvgUzyVo8Sq2Ojuet9ZNjyZNFe55SrxYJntXXoIV3CUBk+WTMTIdlytem3f51rj8O8xE0VoUrJaamqv8nFoVicIPdKJre8Fu1uNnmKWUC9kA0Fj7rz1M3t8jUaoHuIlPIeYvSOpkc64RWXw4E7b4ffDFdGpf5d1OYwHp9gnHBiRC85jUm1ADGUTe2ZZg5IaUUjn8heGfSE3bFyMQ==',
+            'VK_MAC' => 'VGtxFaXYXIZe9xkyxiwEQG+PjwuyFr4uXcfubKMlp8y1mEH+gAiPz9M+TGZFWUQoIBCKu/mkKB7i89OYjlQTo8GWDQtD2ovMobuhU8eeIfYsEY9oSXc3cxp0QePFMu3g8XAAweZf28jostVDdv/Q5gF82tSflTCu8rkvA7ymjNql/iF7GwwKNnTWUbJwLMRlu8XsMWry0oChKPbIeBKdO97Zxr53AG8c7gRAKmsFzKTRtIoMrJpXlVpZ7kZcGTU7Rzy/Zs6oACLhN7Vn0xDqSP+KWEGXlT7Z7DcIPQ3Y5Ghy8Ytje+khrkpM1yC3AzM66RsllNVc4JA3uI1sfxN/oA==',
             'VK_RETURN' => 'http://localhost:8080/omnipay/banklink/',
             'VK_LANG' => 'LAT',
             'VK_ENCODING' => 'UTF-8',
@@ -81,15 +81,15 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals('https://www.swedbank.lv/banklink/', $response->getRedirectUrl());
 
         $this->assertEquals(array(
-            'VK_SERVICE' => 1002,
-            'VK_VERSION' => '008',
+            'VK_SERVICE' => 1012,
+            'VK_VERSION' => '009',
             'VK_SND_ID' => '1',
             'VK_STAMP' => 'abc123',
             'VK_AMOUNT' => '10.00',
             'VK_CURR' => 'EUR',
             'VK_REF' => 'abc123',
             'VK_MSG' => 'purchase description',
-            'VK_MAC' => 'j6dRFu5rszWnYw4S2g1r0cdxDJ8Es7SUOgQpmMQ0j5vjJZgCjf+0I9EfbvEZwseoiRWKO0CRi/pIdXxD6DNLpTCMe9GBgEKw7H2jzhPl+0VcZYThu/Gbt4F97A3vSk+jhmwbVuG991qFuEQUpA3IA8QPJ811VRjpCDEvv1Sz6zbivhIUHXYS2E3HpqWS85dnTFE6SqpXI37wzKMli3GUe8STHATfL4Vv6APNz5LSD4E6yituf95h2B5PbWeVEV9Sxf1FcLg8cXpTMRnlvdsqGZf0kOP0iYHEYwESvtmLbAzREe/cjt/j5Hsmsm6D1SLIbzFMyFwjterX8PwIpikrMw==',
+            'VK_MAC' => 'ftWhubDLjYssINn4FYFtKGM35WApxIPTUBf3TxA6qHzBX6bMWR60zrU1nDyxlAEZzWeIjt+1dROMcBKdxd0D29NdGfzjOaO6zuioQyjucIIK3ks5Y0E7ebx31BKoqMqgW751ko9m+yI1k338fPCQ8A9ax+1Yev5+biPwfC/wFuzeJXoAuyDBLibMLw3D3i8ZCk0eyqlKUm6wlyxDUWKs3LH0TLRTLh+/eNVILckVWuxE0gpBgfntI/vsHpK9KCaa+X5uPh9PJ6GmV2wWnTEJYlI1pZqZ9H03fUcCoMnTg85q6uVkqkw3p60oG5e8zI4vbJ03Jr0hft+cK8PWZEcq5g==',
             'VK_RETURN' => 'http://localhost:8080/omnipay/banklink/',
             'VK_LANG' => 'LAT',
             'VK_ENCODING' => 'UTF-8',
