@@ -9,6 +9,9 @@ namespace Omnipay\SwedbankBanklink\Utils;
  */
 class Pizza
 {
+
+    const SIGNATURE_ALGORITHM = OPENSSL_ALGO_SHA512;
+
     // Returns base64 encoded control code
     public static function generateControlCode(array $data, $encoding, $privateCertPath, $passPhrase)
     {
@@ -17,7 +20,7 @@ class Pizza
         // Compute controlCode
         $certContent = file_get_contents($privateCertPath);
         $privateKey = openssl_get_privatekey($certContent, $passPhrase);
-        openssl_sign($hash, $controlCode, $privateKey);
+        openssl_sign($hash, $controlCode, $privateKey, self::SIGNATURE_ALGORITHM);
         openssl_free_key($privateKey);
 
         return base64_encode($controlCode);
