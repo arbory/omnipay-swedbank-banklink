@@ -15,8 +15,8 @@ class PurchaseRequest extends AbstractRequest
     private function getEncodedData()
     {
         $data = [
-            'VK_SERVICE'    => '1002', // Service code
-            'VK_VERSION'    => '008', // Protocol version
+            'VK_SERVICE'    => '1012', // Service code
+            'VK_VERSION'    => '009', // Protocol version
             'VK_SND_ID'     => $this->getMerchantId(),
             'VK_STAMP'      => $this->getTransactionReference(),  // Max 20 length
             'VK_AMOUNT'     => $this->getAmount(), // Decimal with point
