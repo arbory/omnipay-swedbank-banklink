@@ -12,7 +12,7 @@ class CompleteResponse extends AbstractResponse
      */
     public function isSuccessful(): bool
     {
-        if ($this->data['VK_SERVICE'] == '1101') {
+        if ($this->data['VK_SERVICE'] == '1111') {
             return true;
         }
         return false;
@@ -26,12 +26,12 @@ class CompleteResponse extends AbstractResponse
      */
     public function isCancelled(): bool
     {
-        return $this->data['VK_SERVICE'] == '1901';
+        return $this->data['VK_SERVICE'] == '1911';
     }
 
     public function getMessage()
     {
-        if ($this->data['VK_SERVICE'] == '1901') {
+        if ($this->data['VK_SERVICE'] == '1911') {
             return 'Timeout or user canceled payment';
         }
         return 'Payment was successful';

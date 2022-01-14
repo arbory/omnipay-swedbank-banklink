@@ -24,9 +24,9 @@ class CompleteRequest extends AbstractRequest
         'VK_REF' => true,
         'VK_MSG' => true,
         'VK_MAC' => false,
+        'VK_ENCODING' => false,
         'VK_LANG' => false,
         'VK_AUTO' => false,
-        'VK_ENCODING' => false
     ];
 
     /**
@@ -48,11 +48,11 @@ class CompleteRequest extends AbstractRequest
         'VK_SND_NAME' => true,
         'VK_REF' => true,
         'VK_MSG' => true,
-        'VK_T_DATE' => true,
+        'VK_T_DATETIME' => true,
         'VK_MAC' => false,
+        'VK_ENCODING' => false,
         'VK_LANG' => false,
-        'VK_AUTO' => false,
-        'VK_ENCODING' => false
+        'VK_AUTO' => false
     ];
 
     public function getData()
@@ -92,11 +92,18 @@ class CompleteRequest extends AbstractRequest
     protected function validateResponseParameters()
     {
         $response = $this->getData();
-        if (!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1101', '1901'])) {
+        if (!isset($response['VK_SERVICE']) || !in_array($response['VK_SERVICE'], ['1111', '1911'])) {
             throw new InvalidRequestException('Unknown VK_SERVICE code');
         }
 
-        $responseFields = $response['VK_SERVICE'] == '1101' ? $this->successResponse : $this->errorResponse;
+        $responseFields = $response['VK_SERVICE'] == '1111' ? $this->successResponse : $this->errorResponse;
+
+        //check for missing fields, will throw exc. on missing fields
+        foreach ($responseFields as $fieldName => $usedInHash) {
+            if (! isset($response[$fieldName])) {
+                throw new InvalidRequestException("The $fieldName parameter is required");
+            }
+        }
 
         //verify data corruption
         $this->validateIntegrity($responseFields);

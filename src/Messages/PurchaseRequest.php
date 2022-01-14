@@ -2,6 +2,7 @@
 
 namespace Omnipay\SwedbankBanklink\Messages;
 
+use Datetime;
 use Omnipay\SwedbankBanklink\Utils\Pizza;
 
 class PurchaseRequest extends AbstractRequest
@@ -23,6 +24,9 @@ class PurchaseRequest extends AbstractRequest
             'VK_CURR'       => $this->getCurrency(), // ISO 4217 format (LVL/EUR, etc.)
             'VK_REF'        => $this->getTransactionReference(),  // Max 20 length
             'VK_MSG'        => $this->getDescription(), // Max 300 length
+            'VK_RETURN'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
+            'VK_CANCEL'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
+            'VK_DATETIME'   => $this->getDateTime(), // Max 24 length
         ];
         return $data;
     }
@@ -35,7 +39,6 @@ class PurchaseRequest extends AbstractRequest
     {
         $data = [
             'VK_MAC'        => $this->generateControlCode($this->getEncodedData()), // MAC - Control code / signature
-            'VK_RETURN'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
             'VK_LANG'       => $this->getLanguage(), // Communication language (LAT, ENG RUS), no format standard?
             'VK_ENCODING'   => self::ENCODING_UTF_8 // UTF-8
         ];
@@ -71,6 +74,23 @@ class PurchaseRequest extends AbstractRequest
     public function getMerchantId()
     {
         return $this->getParameter('merchantId');
+    }
+
+    /**
+     * @return string
+     */
+    public function setDateTime($value)
+    {
+        $this->setParameter('dateTime', $value);
+    }
+
+    /**
+     * @param $value
+     */
+    public function getDateTime()
+    {
+        $dateTime = is_null($this->getParameter('dateTime')) ? new DateTime() : $this->getParameter('dateTime');
+        return $dateTime->format(DateTime::ISO8601);
     }
 
     /**
