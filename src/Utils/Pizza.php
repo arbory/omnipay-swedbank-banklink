@@ -56,7 +56,7 @@ class Pizza
             throw new \RuntimeException('Certificate error :' . openssl_error_string());
         }
 
-        $result = openssl_verify($hash, $signature, $publicKey);
+        $result = openssl_verify($hash, $signature, $publicKey, self::SIGNATURE_ALGORITHM);
 
         openssl_free_key($publicKey);
 

@@ -33,7 +33,7 @@ class GatewayTest extends GatewayTestCase
             'currency' => 'EUR',
         );
 
-        // regenerate new bank mac with: self::generateControlCode($data, $encoding, 'tests/Fixtures/key.pem', '')
+        // regenerate new bank mac with: \Omnipay\SwedbankBanklink\Utils\Pizza::generateControlCode($data, 'UTF-8', 'tests/Fixtures/key.pem', '')
     }
 
     public function testPurchaseSuccess()
@@ -108,11 +108,11 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals($response->getData(), $response->getRedirectData());
     }
 
-    public function testPurchaseCompleteSuccess()
+    public function testPurchaseCompleteSuccessWithPOST()
     {
         $postData = array(
             'VK_SERVICE' => '1111',
-            'VK_VERSION' => '008',
+            'VK_VERSION' => '009',
             'VK_SND_ID' => 'HP',
             'VK_REC_ID' => 'REFEREND',
             'VK_STAMP' => 'abc123',
@@ -129,7 +129,7 @@ class GatewayTest extends GatewayTestCase
             'VK_LANG' => 'LAT',
             'VK_AUTO' => 'N',
             'VK_ENCODING' => 'UTF-8',
-            'VK_MAC' => 'hlSDn/KlUjpeWxUQt8zOB+1HzWp8hhUroscUM/HoGRZAFSuwLLMpsfVysAKEw8nXG96QQxdO0YKqlETwOhDAnnKqJNciEmMoRAxmsdxvWsOZpbEjDDcvETs1s5dxpCZl4JnmT4/3zV/TTegBzULaCxJRAF0Pe6ZdmmUVnrMH4W3kDbyCfldrh6ghJ/pXMFfSbmGd/Z4478KmS1sX3jESQS6JRjbEeJsxyqfuGAbqhL3v99Ynxl/7dq6PUiGvYhEoXgnpW4rxOpkllz3ISBr3FvDBrjFJxHDbePQHVCkxxajopCZ4uJy4UeEEpYNUb33TJ6JoSo4CxQzFCLX3yinekQ=='
+            'VK_MAC' => 'EQNQkaI9JtHjbU+3gEVMaOw8jMdS85mx+OIZd8PlL+v+YAl3uEfuqAQiOnXe4tziUb0qhaciVveW8bPd4r98iJDVgu3kNPzVNs817hP4XFBpgz1DY8O4wqvyBM7iRbX2dPKgQgrZ0dGwQ9ixipgq4ou65GGqUxSP1/WfM40VJGdsH5z1FchajKym3gphiM03OMqxe62Ib6nsr8i3efGGfCtgOiP/7vnOWCOPnRU0gtTKGTE+Tv0PAjuYQCjPIoyAcnPzoQzuAFlv6XiDGTndekZPuz5R3rsHvYAh2C7Ln3lJUTb435mJDRTh63OveEwdFKyZjDoJ7xXSdYXiCehGeA=='
         );
 
         $this->getHttpRequest()->setMethod('POST');
@@ -150,7 +150,7 @@ class GatewayTest extends GatewayTestCase
     {
         $getData = array(
             'VK_SERVICE' => '1111',
-            'VK_VERSION' => '008',
+            'VK_VERSION' => '009',
             'VK_SND_ID' => 'HP',
             'VK_REC_ID' => 'REFEREND',
             'VK_STAMP' => 'abc123',
@@ -167,7 +167,7 @@ class GatewayTest extends GatewayTestCase
             'VK_LANG' => 'LAT',
             'VK_AUTO' => 'Y',
             'VK_ENCODING' => 'UTF-8',
-            'VK_MAC' => 'hlSDn/KlUjpeWxUQt8zOB+1HzWp8hhUroscUM/HoGRZAFSuwLLMpsfVysAKEw8nXG96QQxdO0YKqlETwOhDAnnKqJNciEmMoRAxmsdxvWsOZpbEjDDcvETs1s5dxpCZl4JnmT4/3zV/TTegBzULaCxJRAF0Pe6ZdmmUVnrMH4W3kDbyCfldrh6ghJ/pXMFfSbmGd/Z4478KmS1sX3jESQS6JRjbEeJsxyqfuGAbqhL3v99Ynxl/7dq6PUiGvYhEoXgnpW4rxOpkllz3ISBr3FvDBrjFJxHDbePQHVCkxxajopCZ4uJy4UeEEpYNUb33TJ6JoSo4CxQzFCLX3yinekQ=='
+            'VK_MAC' => 'EQNQkaI9JtHjbU+3gEVMaOw8jMdS85mx+OIZd8PlL+v+YAl3uEfuqAQiOnXe4tziUb0qhaciVveW8bPd4r98iJDVgu3kNPzVNs817hP4XFBpgz1DY8O4wqvyBM7iRbX2dPKgQgrZ0dGwQ9ixipgq4ou65GGqUxSP1/WfM40VJGdsH5z1FchajKym3gphiM03OMqxe62Ib6nsr8i3efGGfCtgOiP/7vnOWCOPnRU0gtTKGTE+Tv0PAjuYQCjPIoyAcnPzoQzuAFlv6XiDGTndekZPuz5R3rsHvYAh2C7Ln3lJUTb435mJDRTh63OveEwdFKyZjDoJ7xXSdYXiCehGeA=='
         );
 
         $this->getHttpRequest()->query->replace($getData);
@@ -187,18 +187,16 @@ class GatewayTest extends GatewayTestCase
     {
         $postData = array(
             'VK_SERVICE' => '1911',
-            'VK_VERSION' => '008',
+            'VK_VERSION' => '009',
             'VK_SND_ID' => 'HP',
             'VK_REC_ID' => 'REFEREND',
             'VK_STAMP' => 'abc123',
-            'VK_CURR' => 'EUR',
             'VK_REF' => 'abc123',
             'VK_MSG' => 'Payment for order 1231223',
-            'VK_T_DATETIME' => '2020-03-13T07:21:14+0200',
+            'VK_MAC' => 'n9pSpXfOproOoS7xgvTGwbFr6aj+wDIu9+Yn5yaCM9VwfOu+sdZlUUMHeXM/Zalt4dcNjQten5/g230fZ6OpRxSPfzO8BE+ioE8oCvVuMgeF6HGNv/Y8TOv/1rFO2YX4BunWUbJ2zoCD2evQZnXqUFeyPuy0D9Z8Do5LisprJjJdK9IDZUf2pmVtMHJAoDRE5cx1lsU/3a9RdZtLV1YrwDlnrST/e4mSzundamBt8ye9JnD3AGTCZCzjhng1mg4J1K2KN5uo6DA4Q6MzNyDW2d/TwEDB5VM7F7GVmZn8uRLnWtQGpO4R9RpmAG4yElykXIw4L0vDClwO2VHrkrHwrg==',
+            'VK_ENCODING' => 'UTF-8',
             'VK_LANG' => 'LAT',
             'VK_AUTO' => 'N',
-            'VK_ENCODING' => 'UTF-8',
-            'VK_MAC' => 'pOdJTcWaX5GyL/CuhsbnBY0hCN7ImaFSVdzEN4jTQmmaSq1oRr+r6kdS+1KktE7jfXfMi0vsnSPVVF7YhAVPQvXqJoZYVocA9m1KFX/B5i/m6xYqSRDUFzomfas1M1Er0QAHf0EOA6W+Z/z0zqJ9IdDg1Jj9S+dM32orA2JAGtYM3Se/O22v+agP42dpt2iVcPRi3PeLIObImIOSn0FeObMYEGQNrb8s5RBBFwsChGblOa1lcPCvkFHuqWgioimp6rHtlewPYB03tNyUkmyOeTPFC3WcJRqbE9Z7egTkuFawgqUybhuDDmX5v4B1vMK76+6VBVNxZsTH+kVV7ArXeA=='
         );
 
         $this->getHttpRequest()->query->replace($postData);
@@ -217,7 +215,7 @@ class GatewayTest extends GatewayTestCase
     {
         $postData = array(
             'VK_SERVICE' => '1911',
-            'VK_VERSION' => '008',
+            'VK_VERSION' => '009',
             'VK_SND_ID' => 'HP',
             'VK_REC_ID' => 'REFEREND',
             'VK_STAMP' => 'abc123',
@@ -257,7 +255,7 @@ class GatewayTest extends GatewayTestCase
     {
         $postData = array(
             'VK_SERVICE' => '1111',
-            'VK_VERSION' => '008',
+            'VK_VERSION' => '009',
             'VK_SND_ID' => 'HP',
             'VK_REC_ID' => 'REFEREND',
             'VK_STAMP' => 'abc123',
