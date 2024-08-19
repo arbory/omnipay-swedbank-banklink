@@ -18,6 +18,6 @@ abstract class AbstractResponse extends CommonAbstractResponse
 
     public function getTransactionId()
     {
-        return $this->data['VK_STAMP'] ?? $this->data['VK_STAMP'];
+        return $this->data['VK_STAMP'];
     }
 }
