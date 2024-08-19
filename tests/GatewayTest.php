@@ -16,7 +16,7 @@ class GatewayTest extends GatewayTestCase
      */
     protected $options;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -58,9 +58,8 @@ class GatewayTest extends GatewayTestCase
             'VK_STAMP' => 'abc123',
             'VK_AMOUNT' => '10.00',
             'VK_CURR' => 'EUR',
-            'VK_REF' => 'abc123',
             'VK_MSG' => 'purchase description',
-            'VK_MAC' => 'cD0FQXbvtlQyj0EAwro5NQdrG1SS65zNhsML7m7ca7gy4KI+8Css9vGir7PFg8+FwV/3qtqncvQfH0GwrA1eP1ozCO6YhJta8WnmREqREfWNPbUcTxWi6hpZkbdYWeXZ+iETYlhI8cL6/ob9jUsqLzihDiea/FXdnien7FpE8cjDAGde1hjeQH32+iHp9/WwfYZRE+p5lKB/I9zhQnGsmlA34rty13BL6sD2u85I0Q73p/CUJl7ZiYMnzBqUE8ERdyp467Q+IGPh8RwRvileYt447SG6XX8PtrQ1xoMWpPOxYYnO4AfTA3STzyERv5ejslNtfAX09l+1nDRjx/9k2g==',
+            'VK_MAC' => 'hcXUvcUezt/pyt/AauGvFYtHK9beMe4KMGDTVkypFXOxgAoPv5dJeJ7LQCtq8gWE13RnK5+1xnMNmXVuMop808JCVK1I/NXXuGQW+KrP2YE5n3ZjnnghwBWAaNaw29xzwMPwKSKxqn4aYQIJWYyP/h+pM4YUyDAu7QUXTCZsDTP5MmdV0niNpiYOzn7idBVo05EFY6uqfprtCeI3/1Wg5vN1Gphu+xEAcD8WYyDkZq3m5fJ5Md3w2NR55MxVBKXlIW9vqWLsbQT1oJOv0lNETCKFWW9oywmZ9MI08krlbZ5EaevmKL9kqyUPZ7irtyz1HxP0L4QFCedJVAZhg1TL2w==',
             'VK_RETURN' => 'http://localhost:8080/omnipay/banklink/',
             'VK_LANG' => 'LAT',
             'VK_ENCODING' => 'UTF-8',
@@ -95,9 +94,8 @@ class GatewayTest extends GatewayTestCase
             'VK_STAMP' => 'abc123',
             'VK_AMOUNT' => '10.00',
             'VK_CURR' => 'EUR',
-            'VK_REF' => 'abc123',
             'VK_MSG' => 'purchase description',
-            'VK_MAC' => 'KkmmXu2XJ8wL9ONSxCTHPE7zhKQYob7Nvh4Ivq/TQn1Hq+4rjULOLYgj/lYKF+EUVvFmNGoFZyJ0uGSDat1vcxrdUYBFCTocJhOHN9o1SNvfzlU0IfcVw+NqnNUm3CYZykJmcLIeqkPjjoEy2OKTz6oWf9Dvf/9q179xIHzBDl3cZg0HvRvKmL9LVjWKKOlv8AfenGzOZ47crxw1OVnDSO270WdwBywkVfEiFDDDvFe+kGmvrF/zFftvR+RbIf15YR9S2np7vxYOakok4JOZrXmxNIJLgdH/BROjyIzlKbVBQsZ6AkLEHsAc+VFFqipgIWCJF1XFnurTDixOKgo23A==',
+            'VK_MAC' => 'h+ZJaN0GV6Lm3qjpc/ljB4//ykwtGTRgAw9imiUT9pah2V63uqkr33P28ChwO0cwnEsXKBLBK4pzC7Lrfh26B6REEl/Bl2sLwxDJ/lCdE6R54HAvxl0mCIgwJBXTmVh9ES6D8Bz2DnaGz8dOcT4Ny69ggn7LmQ33p9W12Oh9OGVm3BpEHkD+cG5b8mpeEyIaMzqmHwUVHljFqCwwVM5WVHfN2CheYIc2dQeDAuzncfMU3HR29Kf1gP2e9byKKfgoN9ALnwcdoD+GQV5NzLlfJOzb28GO5JfQckQ4VqY49XFVnO8z70uG90DiT8UBFSXG+vdFmihoZqujeF/Bcj3mHw==',
             'VK_RETURN' => 'http://localhost:8080/omnipay/banklink/',
             'VK_LANG' => 'LAT',
             'VK_ENCODING' => 'UTF-8',
