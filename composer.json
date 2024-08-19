@@ -12,12 +12,20 @@
       "psr-4": { "Omnipay\\SwedbankBanklink\\" : "src/" }
     },
     "require": {
-      "omnipay/common": "~3.0"
+      "omnipay/common": "~3.0",
+        "php-http/guzzle7-adapter": "^1.0"
     },
     "require-dev": {
-      "omnipay/tests": "~3.0",
+      "omnipay/tests": "~4.0",
       "squizlabs/php_codesniffer": "^3",
       "phpro/grumphp": "^1",
-      "php-coveralls/php-coveralls": "^2"
+      "php-coveralls/php-coveralls": "^2",
+        "http-interop/http-factory-guzzle": "^1.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "phpro/grumphp": true
+        }
     }
 }

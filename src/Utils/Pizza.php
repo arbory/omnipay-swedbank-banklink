@@ -21,7 +21,6 @@ class Pizza
         $certContent = file_get_contents($privateCertPath);
         $privateKey = openssl_get_privatekey($certContent, $passPhrase);
         openssl_sign($hash, $controlCode, $privateKey, self::SIGNATURE_ALGORITHM);
-        openssl_free_key($privateKey);
 
         return base64_encode($controlCode);
     }
@@ -57,8 +56,6 @@ class Pizza
         }
 
         $result = openssl_verify($hash, $signature, $publicKey, self::SIGNATURE_ALGORITHM);
-
-        openssl_free_key($publicKey);
 
         return boolval($result);
     }
