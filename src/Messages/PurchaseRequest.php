@@ -15,6 +15,10 @@ class PurchaseRequest extends AbstractRequest
      */
     private function getEncodedData()
     {
+        $insertData = $this->shouldIncludeDescription() ?
+            ['VK_REF' => '', 'VK_MSG' => $this->getDescription()] :
+            ['VK_REF' => $this->getTransactionReference(), 'VK_MSG' => ''];
+
         $data = [
             'VK_SERVICE'    => '1012', // Service code
             'VK_VERSION'    => '009', // Protocol version
@@ -22,16 +26,11 @@ class PurchaseRequest extends AbstractRequest
             'VK_STAMP'      => $this->getTransactionReference(),  // Max 20 length
             'VK_AMOUNT'     => $this->getAmount(), // Decimal with point
             'VK_CURR'       => $this->getCurrency(), // ISO 4217 format (LVL/EUR, etc.)
+            ...$insertData,
             'VK_RETURN'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
             'VK_CANCEL'     => $this->getReturnUrl(), // Transaction (1101, 1901) response url, 150 max length
             'VK_DATETIME'   => $this->getDateTime(), // Max 24 length
         ];
-
-        if ($this->shouldIncludeDescription()) {
-            $data['VK_MSG'] = $this->getDescription(); // Max 300 length
-        } else {
-            $data['VK_REF'] = $this->getTransactionReference();  // Max 20 length
-        }
 
         return $data;
     }
