@@ -4,6 +4,7 @@ namespace Omnipay\SwedbankBanklink\Messages;
 
 use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
 use Omnipay\SwedbankBanklink\Utils\JwsSignature;
+use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
 
 /**
  * Abstract Request for Swedbank V3 API
@@ -15,6 +16,8 @@ use Omnipay\SwedbankBanklink\Utils\JwsSignature;
  */
 abstract class AbstractRequest extends BaseAbstractRequest
 {
+    use HasBaseUrl;
+    
     /**
      * Initialize request with gateway parameters
      */
@@ -22,8 +25,13 @@ abstract class AbstractRequest extends BaseAbstractRequest
     {
         // Ensure baseUrl is available from gateway config
         if (!isset($parameters['baseUrl']) && isset($this->gateway) && $this->gateway) {
-            $parameters['baseUrl'] = $this->gateway->getParameter('baseUrl');
+            $gatewayBaseUrl = $this->gateway->getParameter('baseUrl');
+
+            if (!empty($gatewayBaseUrl)) {
+                $parameters['baseUrl'] = $gatewayBaseUrl;
+            }
         }
+
         return parent::initialize($parameters);
     }
 
@@ -172,32 +180,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
     public function setLocale(string $value): self
     {
         return $this->setParameter('locale', strtolower($value));
-    }
-
-    /**
-     * Get base URL
-     *
-     * @return string
-     */
-    public function getBaseUrl(): string
-    {
-        // Check for explicit baseUrl parameter (e.g., from config)
-        $customUrl = $this->getParameter('baseUrl');
-        if (!empty($customUrl)) {
-            return rtrim($customUrl, '/'); // Remove trailing slash if present
-        }
-
-        // Try to get from environment variable
-        $envUrl = getenv('SWEDBANK_GATEWAY_URL');
-        if (!empty($envUrl)) {
-            return rtrim($envUrl, '/');
-        }
-
-        // Fallback to test/production URLs
-        // In test mode, sandbox environment requires /sandbox path prefix
-        return $this->getTestMode()
-            ? 'https://pi-playground.swedbank.com/sandbox'
-            : 'https://pi.swedbank.com';
     }
 
     /**

@@ -6,6 +6,7 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\SwedbankBanklink\Messages\FetchProvidersRequest;
 use Omnipay\SwedbankBanklink\Messages\FetchTransactionRequest;
 use Omnipay\SwedbankBanklink\Messages\PurchaseRequest;
+use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
 
 /**
  * Swedbank Payment Initiation API V3 Gateway
@@ -22,6 +23,8 @@ use Omnipay\SwedbankBanklink\Messages\PurchaseRequest;
  */
 class Gateway extends AbstractGateway
 {
+    use HasBaseUrl;
+    
     /**
      * Get gateway display name
      *
@@ -239,24 +242,6 @@ class Gateway extends AbstractGateway
     public function setLocale(string $value): self
     {
         return $this->setParameter('locale', strtolower($value));
-    }
-
-    /**
-     * Get API base URL
-     *
-     * @return string
-     */
-    public function getBaseUrl(): string
-    {
-        $customUrl = $this->getParameter('baseUrl');
-        if (!empty($customUrl)) {
-            return rtrim($customUrl, '/'); // Remove trailing slash if present
-        }
-
-        // In test mode, sandbox environment requires /sandbox path prefix
-        return $this->getTestMode()
-            ? 'https://pi-playground.swedbank.com/sandbox'
-            : 'https://pi.swedbank.com';
     }
 
     /**
