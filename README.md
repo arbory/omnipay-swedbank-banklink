@@ -123,6 +123,7 @@ SWEDBANK_COUNTRY=LV
 SWEDBANK_PRIVATE_KEY_PATH=/path/to/payment_certificates/swedbank_sandbox/merchant_private.key
 SWEDBANK_BANK_PUBLIC_KEY_PATH=/path/to/payment_certificates/swedbank_sandbox/bankCertificate_009.txt
 SWEDBANK_ALGORITHM=RS512
+SWEDBANK_DEBUG_LOGGING=false
 SWEDBANK_RETURN_URL=https://yourdomain.com/payments/complete-purchase/swedbank-banklink
 SWEDBANK_GATEWAY_URL=https://pi-playground.swedbank.com/sandbox/
 ```
@@ -135,6 +136,7 @@ SWEDBANK_COUNTRY=LV
 SWEDBANK_PRIVATE_KEY_PATH=/path/to/payment_certificates/swedbank_prod/merchant_private.key
 SWEDBANK_BANK_PUBLIC_KEY_PATH=/path/to/payment_certificates/swedbank_prod/bankCertificate_009.txt
 SWEDBANK_ALGORITHM=RS512
+SWEDBANK_DEBUG_LOGGING=false
 SWEDBANK_RETURN_URL=https://yourdomain.com/payments/complete-purchase/swedbank-banklink
 SWEDBANK_GATEWAY_URL=https://pi.swedbank.com
 ```
@@ -153,6 +155,7 @@ SWEDBANK_GATEWAY_URL=https://pi.swedbank.com
         'testMode'          => env('SWEDBANK_TEST_MODE', true),
         'returnUrl'         => env('SWEDBANK_RETURN_URL'),
         'baseUrl'           => env('SWEDBANK_GATEWAY_URL'),
+        'debugLogging'      => env('SWEDBANK_DEBUG_LOGGING', false),
     ],
 ],
 ```
@@ -175,6 +178,7 @@ $gateway->initialize([
     'algorithm'         => env('SWEDBANK_ALGORITHM', 'RS512'),
     'testMode'          => env('SWEDBANK_TEST_MODE', true),
     'baseUrl'           => env('SWEDBANK_GATEWAY_URL'),
+    'debugLogging'      => env('SWEDBANK_DEBUG_LOGGING', false),
 ]);
 
 // Alternative: pass raw key content instead of file paths
@@ -184,6 +188,7 @@ $gateway->initialize([
 //     'privateKey'    => file_get_contents('/path/to/private.key'),
 //     'bankPublicKey' => file_get_contents('/path/to/bank-certificate.pem'),
 //     'testMode'      => true,
+//     'debugLogging'  => false,
 // ]);
 ```
 

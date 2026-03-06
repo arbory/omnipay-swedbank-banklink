@@ -7,6 +7,7 @@ use Omnipay\SwedbankBanklink\Messages\FetchProvidersRequest;
 use Omnipay\SwedbankBanklink\Messages\FetchTransactionRequest;
 use Omnipay\SwedbankBanklink\Messages\PurchaseRequest;
 use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
+use Omnipay\SwedbankBanklink\Utils\HasDebugLogging;
 
 /**
  * Swedbank Payment Initiation API V3 Gateway
@@ -24,6 +25,7 @@ use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
 class Gateway extends AbstractGateway
 {
     use HasBaseUrl;
+    use HasDebugLogging;
     
     /**
      * Get gateway display name
@@ -52,6 +54,7 @@ class Gateway extends AbstractGateway
             'locale' => 'en',
             'testMode' => false,
             'baseUrl' => '',
+            'debugLogging' => false,
         ];
     }
 

@@ -5,6 +5,7 @@ namespace Omnipay\SwedbankBanklink\Messages;
 use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
 use Omnipay\SwedbankBanklink\Utils\JwsSignature;
 use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
+use Omnipay\SwedbankBanklink\Utils\HasDebugLogging;
 
 /**
  * Abstract Request for Swedbank V3 API
@@ -17,6 +18,7 @@ use Omnipay\SwedbankBanklink\Utils\HasBaseUrl;
 abstract class AbstractRequest extends BaseAbstractRequest
 {
     use HasBaseUrl;
+    use HasDebugLogging;
     
     /**
      * Initialize request with gateway parameters
@@ -321,56 +323,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
                 'error' => $e->getMessage(),
                 'status' => 'ERROR'
             ], 500);
-        }
-    }
-
-    /**
-     * Log the Swedbank API request for debugging
-     *
-     * @param array $requestData The request data to log
-     * @return void
-     */
-    protected function logRequest(array $requestData): void
-    {
-        if (class_exists('\Illuminate\Support\Facades\Log')) {
-            try {
-                // Pretty-print body if it's a JSON string
-                $prettyData = $requestData;
-                if (isset($prettyData['body']) && is_string($prettyData['body'])) {
-                    $bodyDecoded = json_decode($prettyData['body'], true);
-                    if ($bodyDecoded !== null) {
-                        $prettyData['body'] = $bodyDecoded;
-                    }
-                }
-                
-                \Illuminate\Support\Facades\Log::channel('payments')->debug('Swedbank V3 API Request: ' . json_encode($prettyData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            } catch (\Exception $e) {
-                // Logging failed, continue anyway
-            }
-        }
-    }
-
-    /**
-     * Log the Swedbank API response for debugging
-     *
-     * @param array $responseData The response data to log
-     * @return void
-     */
-    protected function logResponse(array $responseData): void
-    {
-        if (class_exists('\Illuminate\Support\Facades\Log')) {
-            try {
-                // Exclude body from logging if response_data is present (they're the same data)
-                $prettyData = $responseData;
-                
-                if (isset($prettyData['body']) && isset($prettyData['response_data'])) {
-                    unset($prettyData['body']);
-                }
-                
-                \Illuminate\Support\Facades\Log::channel('payments')->debug('Swedbank V3 API Response: ' . json_encode($prettyData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            } catch (\Exception $e) {
-                // Logging failed, continue anyway
-            }
         }
     }
 

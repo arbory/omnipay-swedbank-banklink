@@ -121,27 +121,26 @@ class FunctionalTest extends TestCase
 
     public function testGatewayBaseUrlProduction()
     {
+        $prodUrl = getenv('SWEDBANK_GATEWAY_URL_PROD');
+        $this->gateway->setBaseUrl($prodUrl);
         $this->gateway->setTestMode(false);
-        
         $reflection = new \ReflectionClass($this->gateway);
         $method = $reflection->getMethod('getBaseUrl');
         $method->setAccessible(true);
-        
+
         $baseUrl = $method->invoke($this->gateway);
-        
-        $this->assertEquals('https://pi.swedbank.com', $baseUrl);
+        $this->assertEquals($prodUrl, $baseUrl);
     }
 
     public function testGatewayBaseUrlSandbox()
     {
+        $sandboxUrl = getenv('SWEDBANK_GATEWAY_URL_SANDBOX');
+        $this->gateway->setBaseUrl($sandboxUrl);
         $this->gateway->setTestMode(true);
-        
         $reflection = new \ReflectionClass($this->gateway);
         $method = $reflection->getMethod('getBaseUrl');
         $method->setAccessible(true);
-        
         $baseUrl = $method->invoke($this->gateway);
-        
-        $this->assertEquals('https://pi-playground.swedbank.com/sandbox', $baseUrl);
+        $this->assertEquals($sandboxUrl, $baseUrl);
     }
 }

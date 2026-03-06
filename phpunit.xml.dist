@@ -14,6 +14,8 @@
         <env name="SWEDBANK_COUNTRY" value="LV"/>
         <env name="SWEDBANK_TEST_MODE" value="true"/>
         <env name="SWEDBANK_ALGORITHM" value="RS512"/>
+        <env name="SWEDBANK_GATEWAY_URL_SANDBOX" value="https://pi-playground.swedbank.com/sandbox"/>
+        <env name="SWEDBANK_GATEWAY_URL_PROD" value="https://pi.swedbank.com"/>
     </php>
     <coverage/>
 </phpunit>
