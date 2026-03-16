@@ -58,12 +58,9 @@ class FetchProvidersResponse extends AbstractResponse
         $providers = $this->getProviders();
         
         foreach ($providers as $provider) {
-            // V3 uses 'bic' field
-            if (isset($provider['bic']) && $provider['bic'] === $bic) {
-                return $provider;
-            }
-            // Fallback to 'id' for backwards compatibility
-            if (isset($provider['id']) && $provider['id'] === $bic) {
+
+            // Check for 'bic' field first (V3), then fallback to 'id' for backwards compatibility
+            if (($provider['bic'] ?? $provider['id'] ?? null) === $bic) {
                 return $provider;
             }
         }
@@ -138,32 +135,18 @@ class FetchProvidersResponse extends AbstractResponse
     public function getProviderNames(string $locale = 'en', bool $useLongName = false): array
     {
         $names = [];
-        
+        $nameType = $useLongName ? 'longNames' : 'shortNames';
+
         foreach ($this->getProviders() as $provider) {
-            if (!isset($provider['bic'])) {
-                continue;
-            }
-            
-            $bic = $provider['bic'];
-            
-            // V3 API structure: names.shortNames.{locale} or names.longNames.{locale}
-            if (isset($provider['names'])) {
-                $nameType = $useLongName ? 'longNames' : 'shortNames';
-                if (isset($provider['names'][$nameType][$locale])) {
-                    $names[$bic] = $provider['names'][$nameType][$locale];
-                    continue;
-                }
-                // Fallback to English if locale not found
-                if (isset($provider['names'][$nameType]['en'])) {
-                    $names[$bic] = $provider['names'][$nameType]['en'];
-                    continue;
-                }
-            }
-            
-            // Fallback to old structure or BIC
-            $names[$bic] = $provider['name'] ?? $bic;
+            $bic = $provider['bic'] ?? null;
+            if (!$bic) continue;
+
+            $names[$bic] = $provider['names'][$nameType][$locale]
+                ?? $provider['names'][$nameType]['en']
+                ?? $provider['name']
+                ?? $bic;
         }
-        
+
         return $names;
     }
 }

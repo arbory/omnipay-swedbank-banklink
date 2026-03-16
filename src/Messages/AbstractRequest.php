@@ -309,6 +309,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
             ]);
 
             return $this->createResponse($responseData, $httpResponse->getStatusCode());
+
         } catch (\Exception $e) {
             // Log the exception/error
             $this->logResponse([

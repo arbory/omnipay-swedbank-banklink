@@ -4,6 +4,7 @@ namespace Omnipay\SwedbankBanklink\Messages;
 
 use Omnipay\Common\Message\AbstractResponse as BaseAbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
+use Omnipay\SwedbankBanklink\Utils\ApiResponseParser;
 
 /**
  * Abstract Response for Swedbank V3 API
@@ -14,6 +15,8 @@ use Omnipay\Common\Message\RequestInterface;
  */
 abstract class AbstractResponse extends BaseAbstractResponse
 {
+    protected const HTTP_STATUS_OK_START = 200;
+    protected const HTTP_STATUS_REDIRECTION_START = 300;
     /**
      * @var int
      */
@@ -39,8 +42,8 @@ abstract class AbstractResponse extends BaseAbstractResponse
      */
     public function isSuccessful(): bool
     {
-        return $this->statusCode >= 200 
-            && $this->statusCode < 300 
+        return $this->statusCode >= self::HTTP_STATUS_OK_START
+            && $this->statusCode < self::HTTP_STATUS_REDIRECTION_START
             && !isset($this->data['error'])
             && !isset($this->data['_signature_invalid']);
     }
@@ -52,65 +55,7 @@ abstract class AbstractResponse extends BaseAbstractResponse
      */
     public function getMessage(): ?string
     {
-        if (isset($this->data['_signature_invalid'])) {
-            $msg = 'Invalid response signature from bank';
-            if (isset($this->data['_signature_error'])) {
-                $msg .= ': ' . $this->data['_signature_error'];
-            }
-            return $msg;
-        }
-
-        if (isset($this->data['error'])) {
-            return $this->data['error'];
-        }
-
-        if (isset($this->data['message'])) {
-            return $this->data['message'];
-        }
-
-        // V3 API error format: errorMessages.general[] and errorMessages.fields[]
-        if (isset($this->data['errorMessages'])) {
-            $errorMessages = $this->data['errorMessages'];
-            $messages = [];
-
-            // Collect general errors
-            if (isset($errorMessages['general']) && is_array($errorMessages['general'])) {
-                foreach ($errorMessages['general'] as $error) {
-                    if (is_array($error) && isset($error['message'])) {
-                        $messages[] = $error['message'];
-                    }
-                }
-            }
-
-            // Collect field-level errors
-            if (isset($errorMessages['fields']) && is_array($errorMessages['fields'])) {
-                foreach ($errorMessages['fields'] as $error) {
-                    if (is_array($error) && isset($error['field'], $error['message'])) {
-                        $messages[] = sprintf("%s: %s", $error['field'], $error['message']);
-                    } elseif (is_array($error) && isset($error['message'])) {
-                        $messages[] = $error['message'];
-                    }
-                }
-            }
-
-            if (!empty($messages)) {
-                return implode('; ', $messages);
-            }
-        }
-
-        if (isset($this->data['errors']) && is_array($this->data['errors'])) {
-            $errors = [];
-            foreach ($this->data['errors'] as $error) {
-                if (is_array($error) && isset($error['message'])) {
-                    $errors[] = $error['message'];
-                } elseif (is_string($error)) {
-                    $errors[] = $error;
-                }
-            }
-            return implode('; ', $errors);
-        }
-
-        return null;
+        return ApiResponseParser::getMessage($this->data);
     }
 
     /**
@@ -120,42 +65,7 @@ abstract class AbstractResponse extends BaseAbstractResponse
      */
     public function getCode(): ?string
     {
-        if (isset($this->data['code'])) {
-            return (string) $this->data['code'];
-        }
-
-        // V3 API error format: errorMessages.general[] and errorMessages.fields[]
-        if (isset($this->data['errorMessages'])) {
-            $errorMessages = $this->data['errorMessages'];
-
-            // Try general errors first
-            if (isset($errorMessages['general']) && is_array($errorMessages['general'])) {
-                foreach ($errorMessages['general'] as $error) {
-                    if (is_array($error) && isset($error['code'])) {
-                        return (string) $error['code'];
-                    }
-                }
-            }
-
-            // Fall back to field errors
-            if (isset($errorMessages['fields']) && is_array($errorMessages['fields'])) {
-                foreach ($errorMessages['fields'] as $error) {
-                    if (is_array($error) && isset($error['code'])) {
-                        return (string) $error['code'];
-                    }
-                }
-            }
-        }
-
-        if (isset($this->data['errors']) && is_array($this->data['errors'])) {
-            foreach ($this->data['errors'] as $error) {
-                if (is_array($error) && isset($error['code'])) {
-                    return (string) $error['code'];
-                }
-            }
-        }
-
-        return null;
+        return isset($this->data['code']) ? (string) $this->data['code'] : null;
     }
 
     /**
@@ -187,47 +97,5 @@ abstract class AbstractResponse extends BaseAbstractResponse
     public function getTransactionId(): ?string
     {
         return $this->data['merchantTransactionId'] ?? null;
-    }
-
-    /**
-     * Get field-level errors (V3 API format)
-     * Returns array of field errors: ['fieldName' => 'error message', ...]
-     *
-     * @return array
-     */
-    public function getFieldErrors(): array
-    {
-        $fieldErrors = [];
-
-        if (isset($this->data['errorMessages']['fields']) && is_array($this->data['errorMessages']['fields'])) {
-            foreach ($this->data['errorMessages']['fields'] as $error) {
-                if (is_array($error) && isset($error['field'], $error['message'])) {
-                    $fieldErrors[$error['field']] = $error['message'];
-                }
-            }
-        }
-
-        return $fieldErrors;
-    }
-
-    /**
-     * Get general errors (V3 API format)
-     * Returns array of general errors: ['code' => 'message', ...]
-     *
-     * @return array
-     */
-    public function getGeneralErrors(): array
-    {
-        $generalErrors = [];
-
-        if (isset($this->data['errorMessages']['general']) && is_array($this->data['errorMessages']['general'])) {
-            foreach ($this->data['errorMessages']['general'] as $error) {
-                if (is_array($error) && isset($error['code'], $error['message'])) {
-                    $generalErrors[$error['code']] = $error['message'];
-                }
-            }
-        }
-
-        return $generalErrors;
     }
 }

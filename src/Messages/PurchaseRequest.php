@@ -106,16 +106,14 @@ class PurchaseRequest extends AbstractRequest
      */
     public function validate(...$args): void
     {
-        parent::validate(...$args);
-
-        // Required fields per V3 spec
         parent::validate(
             'provider',
             'amount',
             'currency',
             'returnUrl',
             'notificationUrl',
-            'locale'
+            'locale',
+            ...$args,
         );
 
         // Validate amount format (spec: positive number with up to 2 fractional digits)
