@@ -1,0 +1,5 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+x-jws-signature: eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJpYXQiOjE3MDc2NTc2MDAsImFsZyI6IlJTNTEyIn0..dGVzdHNpZ25hdHVyZQ
+
+{"status":"EXECUTED","createdAt":"2026-02-11T10:00:00+0000","statusCheckedAt":"2026-02-11T10:05:00+0000","statusUpdatedAt":"2026-02-11T10:05:00+0000","amount":"10.00","currency":"EUR","debtorAccount":"LV01HABA0001234567890","debtorBic":"HABALT22","debtor":"John Doe","creditorAccount":"LV02HABA0009876543210","creditorBic":"UNBALT22","creditor":"Test Merchant","reference":null,"referenceType":null,"description":"Payment for order","paymentType":"sepa","endToEndIdentification":"f633417f-09d0-40ea-a02e-38b27e591b35","transactionId":"c625052f07004261aee27a8e069b0a5drg23"}

@@ -4,41 +4,94 @@ namespace Omnipay\SwedbankBanklink\Messages;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
 
+/**
+ * Purchase Response (Step 2)
+ * 
+ * Response from payment initiation request.
+ * Contains redirect URL and transaction ID.
+ * 
+ * OpenAPI Schema: PaymentCreationResponse
+ * Endpoint: POST /public/api/v3/transactions/providers/{bic}
+ * 
+ * API Response Structure (V3):
+ * - id: Transaction identifier
+ * - urls.redirect: URL to redirect user to bank
+ * - urls.status: URL for status polling
+ * 
+ * @link https://pi.swedbank.com/developer?version=public_V3
+ */
 class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
-
-    public function isSuccessful()
+    /**
+     * Is the response successful?
+     * For payment initiation, we expect a redirect URL
+     *
+     * @return bool
+     */
+    public function isSuccessful(): bool
     {
-        return false; //needs redirect
+        return false; // Payment is not complete until user authorizes at bank
     }
 
-    // Redirect is processed from merchants HTML form by auto-submitting it to gateway
-    // Use this flag if you want to render custom redirect form
-    // https://github.com/thephpleague/omnipay/issues/306
-    public function isTransparentRedirect()
+    /**
+     * Does the response require a redirect?
+     *
+     * @return bool
+     */
+    public function isRedirect(): bool
     {
-        return true;
+        return parent::isSuccessful() && !empty($this->getRedirectUrl());
     }
 
-    public function isRedirect()
+    /**
+     * Get the redirect URL
+     *
+     * @return string|null
+     */
+    public function getRedirectUrl(): ?string
     {
-        return true;
+        // V3 API returns nested structure: urls.redirect
+        return $this->data['urls']['redirect'] ?? null;
     }
 
-    public function getRedirectMethod()
+    /**
+     * Get redirect method (always GET for Swedbank)
+     *
+     * @return string
+     */
+    public function getRedirectMethod(): string
     {
-        return 'POST';
+        return 'GET';
     }
 
-    public function getRedirectData()
+    /**
+     * Get redirect data (none needed for GET redirect)
+     *
+     * @return array
+     */
+    public function getRedirectData(): array
     {
-        return $this->getData();
+        return [];
     }
 
-    public function getRedirectUrl()
+    /**
+     * Get payment ID from Swedbank (transaction reference)
+     *
+     * @return string|null
+     */
+    public function getTransactionReference(): ?string
     {
-        /** @var PurchaseRequest $request */
-        $request = $this->getRequest();
-        return $request->getGatewayUrl();
+        // V3 API returns 'id' field
+        return $this->data['id'] ?? null;
+    }
+
+    /**
+     * Get status polling URL
+     *
+     * @return string|null
+     */
+    public function getStatusUrl(): ?string
+    {
+        return $this->data['urls']['status'] ?? null;
     }
 }

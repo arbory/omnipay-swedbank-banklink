@@ -1,0 +1,5 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+x-jws-signature: eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJpYXQiOjE3MDc2NTc2MDAsImFsZyI6IlJTNTEyIn0..dGVzdHNpZ25hdHVyZQ
+
+[{"country":"LV","bic":"HABALT22","names":{"shortNames":{"en":"Swedbank","lv":"Swedbank"},"longNames":{"en":"Swedbank AB","lv":"Swedbank AB"}},"urls":{"logo":"https://pi.swedbank.com/swedbank_logo.png","payment":"https://pi.swedbank.com/public/api/v3/transactions/providers/HABALT22"}},{"country":"LV","bic":"UNLAEE2X","names":{"shortNames":{"en":"SEB","lv":"SEB"},"longNames":{"en":"SEB AS","lv":"SEB AS"}},"urls":{"logo":"https://pi.swedbank.com/seb_logo.png","payment":"https://pi.swedbank.com/public/api/v3/transactions/providers/UNLAEE2X"}},{"country":"LV","bic":"RIKOLV23","names":{"shortNames":{"en":"Luminor","lv":"Luminor"},"longNames":{"en":"Luminor AS","lv":"Luminor AS"}},"urls":{"logo":"https://pi.swedbank.com/luminor_logo.png","payment":"https://pi.swedbank.com/public/api/v3/transactions/providers/RIKOLV23"}}]

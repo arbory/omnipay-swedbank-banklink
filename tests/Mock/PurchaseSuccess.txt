@@ -1,0 +1,5 @@
+HTTP/1.1 201 Created
+Content-Type: application/json
+x-jws-signature: eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJpYXQiOjE3MDc2NTc2MDAsImFsZyI6IlJTNTEyIn0..dGVzdHNpZ25hdHVyZQ
+
+{"id":"c625052f07004261aee27a8e069b0a5drg23","urls":{"redirect":"https://pi.swedbank.com/LT/HABALT22/main?packetId=c625052f07004261aee27a8e069b0a5drg23&lang=en","status":"https://pi.swedbank.com/public/api/v3/transactions/c625052f07004261aee27a8e069b0a5drg23/status"}}

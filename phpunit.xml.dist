@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false">
+>
     <testsuites>
-        <testsuite name="Omnipay Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="Omnipay Swedbank V3 Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./src</directory>
-        </whitelist>
-      </filter>
-    <logging>
-        <log type="coverage-html" target="coverage"/>
-    </logging>
+    <php>
+        <env name="SWEDBANK_MERCHANT_ID" value="TEST_MERCHANT"/>
+        <env name="SWEDBANK_COUNTRY" value="LV"/>
+        <env name="SWEDBANK_TEST_MODE" value="true"/>
+        <env name="SWEDBANK_ALGORITHM" value="RS512"/>
+        <env name="SWEDBANK_GATEWAY_URL_SANDBOX" value="https://pi-playground.swedbank.com/sandbox"/>
+        <env name="SWEDBANK_GATEWAY_URL_PROD" value="https://pi.swedbank.com"/>
+    </php>
+    <coverage/>
 </phpunit>
