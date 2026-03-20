@@ -9,17 +9,17 @@ use Omnipay\SwedbankBanklink\Utils\HasDebugLogging;
 
 /**
  * Abstract Request for Swedbank V3 API
- * 
+ *
  * Base class for all Swedbank Payment Initiation API V3 requests.
  * Handles JWS signature generation and verification.
- * 
+ *
  * @link https://pi.swedbank.com/developer?version=public_V3
  */
 abstract class AbstractRequest extends BaseAbstractRequest
 {
     use HasBaseUrl;
     use HasDebugLogging;
-    
+
     /**
      * Initialize request with gateway parameters
      */
@@ -195,6 +195,16 @@ abstract class AbstractRequest extends BaseAbstractRequest
     }
 
     /**
+     * Get $body
+     *
+     * @return string
+     */
+    public function getJWSBody($data): string
+    {
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * Send the request with appropriate headers and signature
      *
      * @param mixed $data The data to send
@@ -203,7 +213,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
     public function sendData($data): AbstractResponse
     {
         $url = $this->getEndpoint();
-        $body = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $body = $this->getJWSBody($data);
 
         // Generate JWS signature
         $jwsSignature = JwsSignature::sign(
@@ -256,7 +266,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
                 if (is_array($responseJws)) {
                     $responseJws = $responseJws[0] ?? null;
                 }
-                
+
                 if ($responseJws) {
                     try {
                         $isValid = JwsSignature::verify(
@@ -269,7 +279,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
                         // Signature verification threw an exception
                         $responseData['_signature_error'] = $signatureEx->getMessage();
                         $isValid = false;
-                        
+
                         // Log signature verification failure
                         $this->logResponse([
                             'status' => $httpResponse->getStatusCode(),
@@ -283,7 +293,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
                 } else {
                     $responseData['_signature_error'] = 'No signature header found';
                     $isValid = false;
-                    
+
                     // Log missing signature
                     $this->logResponse([
                         'status' => $httpResponse->getStatusCode(),
@@ -319,7 +329,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
                 'exception_class' => get_class($e),
                 'timestamp' => date('Y-m-d H:i:s'),
             ]);
-            
+
             return $this->createResponse([
                 'error' => $e->getMessage(),
                 'status' => 'ERROR'
