@@ -261,7 +261,7 @@ $response = $gateway->purchase([
     'description'     => 'Order #12345',        // Max 140 chars (unstructured)
     // 'reference'    => 'RF18539007547034',    // ISO11649 structured reference (alternative)
     'provider'        => 'HABALT22',            // BIC from getProviders()
-    'redirectUrl'     => 'https://yourdomain.com/payment/return',
+    'returnUrl'       => 'https://yourdomain.com/payment/return',
     'notificationUrl' => 'https://yourdomain.com/payment/webhook',
 ])->send();
 
@@ -292,7 +292,7 @@ if ($response->isSuccessful()) {
      * $details keys: transactionId, status, amount, currency, paymentType,
      *   debtor, debtorAccount, debtorBic, creditor, creditorAccount, creditorBic,
      *   reference, referenceType, description, endToEndIdentification,
-     *   createdAt, statusUpdatedAt, errorDetails, errorLabels, ...
+     *   createdAt, statusUpdatedAt, statusCheckedAt, errorDetails, errorLabels, ...
      */
 } elseif ($response->isPending()) {
     // Still processing — show a "payment is being processed" page
@@ -456,7 +456,7 @@ class PaymentWebhookController extends Controller
 |---|---|---|
 | Triggered by | Customer browser redirect | Swedbank server POST |
 | Reliability | Can be missed (browser closed) | Reliable, retried on failure |
-| Use for | Fulfillment (update order status) | Show result to customer |
+| Use for | Show result to customer | Fulfillment (update order status) |
 | Needs status poll? | **Yes** — always call `fetchTransaction` | No — payload contains final status |
 
 **Best practice:** use the webhook as the authoritative source for order fulfillment; use the return URL only to show the customer a result page.
@@ -484,7 +484,7 @@ JwsSignature::verify($jws, $body, $bankPublicKey, 0);   // 0 = disabled
 | `amount` | Positive decimal, up to 2 decimal places (e.g., `10.00`) |
 | `currency` | Only **EUR** supported |
 | `locale` | UI language: `en`, `et`, `lv`, `lt`, or `ru` |
-| `redirectUrl` | HTTPS URL for user redirect after payment (max 2048 chars) |
+| `returnUrl` | HTTPS URL for user redirect after payment (max 2048 chars) |
 | `notificationUrl` | HTTPS URL for server-to-server status notifications (max 2048 chars) |
 | `provider` | Bank BIC code (e.g., `HABALT22`, `HABAEE2X`, `RIKOLV23`) |
 
@@ -511,7 +511,7 @@ Use `getProviders()` to get the full list for your country.
 
 ## Logging
 
-All API requests and responses are automatically logged via Laravel's `Log::channel('payments')` facade. This includes:
+When `debugLogging` is set to `true`, all API requests and responses are logged via Laravel's `Log::channel('payments')` facade. This includes:
 
 - Outgoing request URL, method, body, and JWS signature
 - Incoming response status, body, and signature validation result
